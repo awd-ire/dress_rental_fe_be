@@ -28,15 +28,15 @@ include "C:/xampp/htdocs/Dress_rental1/config.php";
             <a href="#">Categories ▼</a>
             <ul class="dropdown-menu">
                 <li class="sub-dropdown">
-                    <a href="/Dress_rental1/subcategorym/subcategory.html">Men ▶</a>
+                    <a href="/Dress_rental1/subcategorym/subcategory.php">Men ▶</a>
                     <ul class="sub-dropdown-menu">
-                        <li><a href="men-traditional.html">Traditional Wear</a></li>
-                        <li><a href="men-party.html">Party Wear</a></li>
+                        <li><a href="men-traditional.php">Traditional Wear</a></li>
+                        <li><a href="men-party.php">Party Wear</a></li>
                         <li><a href="men-wedding.html">Wedding Wear</a></li>
                     </ul>
                 </li>
                 <li class="sub-dropdown">
-                    <a href="/Dress_rental1/subcategoryw/subcategory.html">Women ▶</a>
+                    <a href="/Dress_rental1/subcategoryw/subcategory.php">Women ▶</a>
                     <ul class="sub-dropdown-menu">
                         <li><a href="women-traditional.html">Traditional Wear</a></li>
                         <li><a href="women-party.html">Party Wear</a></li>
