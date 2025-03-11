@@ -28,7 +28,7 @@ include "C:/xampp/htdocs/Dress_rental1/config.php";
             <a href="#">Categories ▼</a>
             <ul class="dropdown-menu">
                 <li class="sub-dropdown">
-                    <a href="#">Men ▶</a>
+                    <a href="/Dress_rental1/subcategorym/subcategory.html">Men ▶</a>
                     <ul class="sub-dropdown-menu">
                         <li><a href="men-traditional.html">Traditional Wear</a></li>
                         <li><a href="men-party.html">Party Wear</a></li>
@@ -36,7 +36,7 @@ include "C:/xampp/htdocs/Dress_rental1/config.php";
                     </ul>
                 </li>
                 <li class="sub-dropdown">
-                    <a href="#">Women ▶</a>
+                    <a href="/Dress_rental1/subcategoryw/subcategory.html">Women ▶</a>
                     <ul class="sub-dropdown-menu">
                         <li><a href="women-traditional.html">Traditional Wear</a></li>
                         <li><a href="women-party.html">Party Wear</a></li>
@@ -44,7 +44,7 @@ include "C:/xampp/htdocs/Dress_rental1/config.php";
                     </ul>
                 </li>
                 <li class="sub-dropdown">
-                    <a href="#">Kids ▶</a>
+                    <a href="/Dress_rental1/subcategoryk/subcategory.php">Kids ▶</a>
                     <ul class="sub-dropdown-menu">
                         <li><a href="kids-traditional.html">Traditional Wear</a></li>
                         <li><a href="kids-party.html">Party Wear</a></li>
@@ -56,7 +56,11 @@ include "C:/xampp/htdocs/Dress_rental1/config.php";
         <li><a href="accessories.html">Accessories</a></li>
         <li><a href="contact.html">Contact Us</a></li>
         <li><a href="account.html">Account</a></li>
-        <li><a href="../cuslogin/cuslogin.php" class="login-btn">Login</a></li>
+        <?php if (isset($_SESSION['user_id'])): ?>
+                    <li><a href="/Dress_rental1/logout.php">Logout</a></li>  <!-- ✅ Show Logout if logged in -->
+                <?php else: ?>
+                    <li><a href="/Dress_rental1/cuslogin/cuslogin.php">Login</a></li>  <!-- ✅ Show Login if not logged in -->
+                <?php endif; ?>
     </ul>
     <div class="nav-icons">
         <div class="search-container">

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Listing</title>
+    <link rel="stylesheet" href="product-listing.css">
+    <script src="product-listing.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="logo">Dress Rental</div>
+        <ul id="nav-menu">
+            <li><a href="home.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#">Categories ▼</a>
+                <ul class="dropdown-menu">
+                    <li class="sub-dropdown">
+                        <a href="#">Men ▶</a>
+                        <ul class="sub-dropdown-menu">
+                            <li><a href="men-traditional.html">Traditional Wear</a></li>
+                            <li><a href="men-party.html">Party Wear</a></li>
+                            <li><a href="men-wedding.html">Wedding Wear</a></li>
+                        </ul>
+                    </li>
+                    <li class="sub-dropdown">
+                        <a href="#">Women ▶</a>
+                        <ul class="sub-dropdown-menu">
+                            <li><a href="women-traditional.html">Traditional Wear</a></li>
+                            <li><a href="women-party.html">Party Wear</a></li>
+                            <li><a href="women-wedding.html">Wedding Wear</a></li>
+                        </ul>
+                    </li>
+                    <li class="sub-dropdown">
+                        <a href="#">Kids ▶</a>
+                        <ul class="sub-dropdown-menu">
+                            <li><a href="kids-traditional.html">Traditional Wear</a></li>
+                            <li><a href="kids-party.html">Party Wear</a></li>
+                            <li><a href="kids-wedding.html">Wedding Wear</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="accessories.html">Accessories</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="account.html">Account</a></li>
+            <li><a href="login.html" class="login-btn">Login</a></li>
+        </ul>
+        <div class="nav-icons">
+            <div class="search-container">
+                <i class="fas fa-search search-icon" onclick="toggleSearch()"></i>
+                <input type="text" id="search-bar" class="search-bar" placeholder="Search...">
+            </div>
+            <a href="wishlist.html"><i class="fas fa-heart"></i></a>
+            <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+            
+        </div>
+    </nav>
+
+
+    <div class="controls">
+        <select id="filter">
+            <option value="all">All</option>
+            <option value="wedding">Wedding Wear</option>
+            <option value="party">Party Wear</option>
+        </select>
+    
+        <select id="sort">
+            <option value="default">Sort By</option>
+            <option value="low-high">Price: Low to High</option>
+            <option value="high-low">Price: High to Low</option>
+            <option value="name-asc">Name: A to Z</option>
+            <option value="name-desc">Name: Z to A</option>
+            <option value="popular">Most Popular</option>
+        </select>
+    </div>
+
+    <div class="product-container" id="product-list">
+        <?php
+        $result = $conn->query("SELECT * FROM dresses WHERE available = 1 
+        OR id IN (SELECT dress_id FROM rental_items WHERE rent_id IN (SELECT id FROM rentals WHERE rental_status = 'pending'))");
+
+        while ($row = $result->fetch_assoc()) {
+            echo "<div class='product-card'>";
+            echo "<a href='dress_details.php?id=" . $row['id'] . "'>";
+            echo "<img src='" . $row['image'] . "' alt='" . $row['name'] . "'>";
+            echo "<h3>" . $row['name'] . "</h3>";
+            echo "<p class='price'>₹" . $row['price'] . "</p>";
+            echo "</a>";
+            echo "</div>";
+        }
+        ?>
+    </div>
+
+</body>
+</html>

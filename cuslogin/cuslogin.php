@@ -1,25 +1,30 @@
-<?php
+<?php  // ✅ Start session
 include "C:/xampp/htdocs/Dress_rental1/config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE email='$email'";
-    $result = $conn->query($sql);
-
+    // ✅ Use prepared statement to prevent SQL injection
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            header("Location: /cus_home/homepage.php");
+            $_SESSION['user_id'] = $user['id'];  // ✅ Store user session
+            $_SESSION['user_email'] = $user['email'];
+            header("Location: /Dress_rental1/cus_home/homepage.php"); // ✅ Redirect after login
             exit;
         } else {
-            echo "Invalid credentials";
+            echo "<script>alert('Invalid credentials');</script>";
         }
     } else {
-        echo "User not found";
+        echo "<script>alert('User not found');</script>";
     }
+    $stmt->close();
 }
 ?>
 
@@ -35,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="login-container">
         <div class="login-box">
             <h2>Login</h2>
-            <form action="/Dress_rental1/cus_home/homepage.php" method="POST">
+            <form action="" method="POST">  <!-- ✅ Action set to empty to process form in the same file -->
                 <input type="email" name="email" placeholder="Enter Email" required>
                 <input type="password" name="password" placeholder="Enter Password" required>
                 <button type="submit">Login</button>
@@ -45,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button class="google-btn" onclick="googleLogin()">
                 <img src="google-icon.png" alt="Google"> Continue with Google
             </button>
-            <p>Don't have an account? <a href="/Dress_rental1/register.php">Sign Up</a></p>
+            <p>Don't have an account? <a href="/Dress_rental1/cusignup/signup.php">Sign Up</a></p>
         </div>
     </div>
     <script src="script.js"></script>

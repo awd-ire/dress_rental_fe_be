@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="styles.css">
+    
+</head>
+<body>
+
+    <div class="container">
+        <h2>Create an Account</h2>
+        <form action="signup.php" method="POST">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            <button type="submit">Signup</button>
+        </form>
+
+        <div class="alternate-login">
+            <p>Or sign up with</p>
+            <button class="google-btn">Continue with Google</button>
+        </div>
+
+        <p class="alternate-login">Already have an account? <a href="/cuslogin/login.php">Login here</a></p>
+    </div>
+
+</body>
+</html>
