@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/Dress_rental1/css/style.css">  <!-- ✅ Link CSS -->
+    <link rel="stylesheet" href="/Dress_rental1/header.css">  <!-- ✅ Link CSS -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>  <!-- ✅ FontAwesome -->
 </head>
 <body>
@@ -35,23 +35,23 @@ if (session_status() === PHP_SESSION_NONE) {
                 <li class="sub-dropdown">
                     <a href="/Dress_rental1/subcategoryw/subcategory.php">Women ▶</a>
                     <ul class="sub-dropdown-menu">
-                        <li><a href="women-traditional.html">Traditional Wear</a></li>
-                        <li><a href="women-party.html">Party Wear</a></li>
-                        <li><a href="women-wedding.html">Wedding Wear</a></li>
+                        <li><a href="">Traditional Wear</a></li>
+                        <li><a href="women-party">Party Wear</a></li>
+                        <li><a href="women-wedding">Wedding Wear</a></li>
                     </ul>
                 </li>
                 <li class="sub-dropdown">
                     <a href="/Dress_rental1/subcategoryk/subcategory.php">Kids ▶</a>
                     <ul class="sub-dropdown-menu">
-                        <li><a href="kids-traditional.html">Traditional Wear</a></li>
-                        <li><a href="kids-party.html">Party Wear</a></li>
-                        <li><a href="kids-wedding.html">Wedding Wear</a></li>
+                        <li><a href="kids-traditional">Traditional Wear</a></li>
+                        <li><a href="kids-party">Party Wear</a></li>
+                        <li><a href="kids-wedding">Wedding Wear</a></li>
                     </ul>
                 </li>
             </ul>
         </li>
-        <li><a href="accessories.html">Accessories</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="accessories">Accessories</a></li>
+        <li><a href="contact">Contact Us</a></li>
         <li><a href="account.html">Account</a></li>
         
         <!-- ✅ Dynamic Login/Logout -->

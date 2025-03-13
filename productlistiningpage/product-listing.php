@@ -1,27 +1,41 @@
+<!-- product-listing.php -->
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php"; // Make sure database connection is included
+include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
 
-// Get category from URL, default to "all" if not set
+// Get category and type from URL
 $category = isset($_GET['category']) ? $_GET['category'] : 'all';
+$type = isset($_GET['type']) ? $_GET['type'] : 'all';
 
 // Prepare SQL query dynamically
 $sql = "SELECT * FROM dresses WHERE available = 1";
+$params = [];
+$types = "";
 
+// Apply category filter
 if ($category !== 'all') {
     $sql .= " AND category = ?";
+    $params[] = $category;
+    $types .= "s";
 }
-var_dump($sql);
+
+// Apply type filter
+if ($type !== 'all') {
+    $sql .= " AND type = ?";
+    $params[] = $type;
+    $types .= "s";
+}
 
 // Prepare and execute the query
 $stmt = $conn->prepare($sql);
-if ($category !== 'all') {
-    $stmt->bind_param("s", $category);
+
+// Bind parameters dynamically if needed
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
 }
 
 $stmt->execute();
 $result = $stmt->get_result();
-var_dump($result->num_rows);
-
+$products = $conn->query("SELECT id, name, image, rental_price,security_amount FROM dresses")
 ?>
 
 <!DOCTYPE html>
@@ -35,11 +49,12 @@ var_dump($result->num_rows);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
- <?php   
-include "C:/xampp/htdocs/Dress_rental1/header.php";
-?>
+    
+<?php include "C:/xampp/htdocs/Dress_rental1/header.php"; ?>
+
     <div class="controls">
 
+        <!-- Sorting Filter -->
         <select id="sort">
             <option value="default">Sort By</option>
             <option value="low-high">Price: Low to High</option>
@@ -50,27 +65,26 @@ include "C:/xampp/htdocs/Dress_rental1/header.php";
         </select>
     </div>
 
-    <div class="product-container" id="product-list">
+    <div class="product-container">
         <?php
-       
         while ($row = $result->fetch_assoc()) {
             echo "<div class='product-card'>";
-            echo "<a href='dresses.php?id=" . $row['id'] . "'>";
-            echo "<img src='". $row['image']. "'alt='".$row['name']."'>";
+            echo "<a href='/Dress_rental1/prodveiw/product.php?id=" . $row['id'] . "'>";
+            echo "<img src='/Dress_rental1/". $row['image']. "' alt='".$row['name']."'>";
+              
             echo "<h3>" . $row['name'] . "</h3>";
             echo "<p class='price'>₹" . $row['price'] . "</p>";
             echo "</a>";
             echo "</div>";
-            
         }
-        
         ?>
     </div>
 
     <script>
-        function filterCategory() {
-            let selectedCategory = document.getElementById("filter").value;
-            window.location.href = `product-listing.php?category=${selectedCategory}`;
+        function applyFilter() {
+            let category = document.getElementById("categoryFilter").value;
+            let type = document.getElementById("typeFilter").value;
+            window.location.href = `product-listing.php?category=${category}&type=${type}`;
         }
     </script>
 

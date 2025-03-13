@@ -1,3 +1,4 @@
+<!-- subcategory.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,25 +19,29 @@
     </header>
 
     <div class="container">
-        <div class="category-card">
-            <a href="../productlistiningpage/product-listing.php?category=Traditional">
-                <img src="traditional.jpg" alt="Traditional Wear">
-                <h2>Traditional Wear</h2>
-            </a>
+        <div class="category-card" onclick="redirectTo('Women', 'Traditional')">
+            <img src="traditional.jpg" alt="Traditional Wear">
+            <h2>Traditional Wear (Women)</h2>
         </div>
-        <div class="product-card">
-            <a href="../productlistiningpage/product-listing.php?category=Party">
-                <img src="party.jpeg" alt="Party Wear">
-                <h2>Party Wear</h2>
-            </a>
+        <div class="category-card" onclick="redirectTo('men', 'party')">
+            <img src="party.jpeg" alt="Party Wear">
+            <h2>Party Wear (Men)</h2>
         </div>
-        <div class="category-card">
-            <a href="product-listing.php?category=wedding">
-                <img src="wedding.jpeg" alt="Wedding Wear">
-                <h2>Wedding Wear</h2>
-            </a>
+        <div class="category-card" onclick="redirectTo('kids', 'wedding')">
+            <img src="wedding.jpeg" alt="Wedding Wear">
+            <h2>Wedding Wear (Kids)</h2>
         </div>
     </div>
+
+    <script>
+        function redirectTo(category, type) {
+            window.location.href = `../productlistiningpage/product-listing.php?category=${category}&type=${type}`;
+        }
+        function toggleMenu() {
+    let menu = document.getElementById("nav-menu");
+    menu.classList.toggle("active");
+}
+    </script>
 
 </body>
 </html>
