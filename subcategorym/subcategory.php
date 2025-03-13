@@ -19,21 +19,29 @@
     </header>
 
     <div class="container">
-        <div class="category-card" onclick="redirectTo('traditional')">
+        <div class="category-card" onclick="redirectTo('Men', 'Traditional')">
             <img src="traditional.jpg" alt="Traditional Wear">
-            <h2>Traditional Wear</h2>
+            <h2>Traditional Wear </h2>
         </div>
-        <div class="category-card" onclick="redirectTo('party')">
+        <div class="category-card" onclick="redirectTo('Men', 'Party')">
             <img src="party.jpeg" alt="Party Wear">
-            <h2>Party Wear</h2>
+            <h2>Party Wear </h2>
         </div>
-        <div class="category-card" onclick="redirectTo('wedding')">
+        <div class="category-card" onclick="redirectTo('Men', 'Wedding')">
             <img src="wedding.jpeg" alt="Wedding Wear">
             <h2>Wedding Wear</h2>
         </div>
     </div>
 
-    <script src="subcategory.js"></script>
+    <script>
+        function redirectTo(category, type) {
+            window.location.href = `../productlistiningpage/product-listing.php?category=${category}&type=${type}`;
+        }
+        function toggleMenu() {
+    let menu = document.getElementById("nav-menu");
+    menu.classList.toggle("active");
+}
+    </script>
 
 </body>
 </html>

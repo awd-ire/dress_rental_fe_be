@@ -38,14 +38,26 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Add to Cart Function
-function addToCart(productId) {
-    fetch("add_to_cart.php?id=" + productId, { method: "POST" })
-        .then(response => response.text())
-        .then(data => {
-            alert("Product added to cart!");
-        })
-        .catch(error => console.error("Error adding to cart:", error));
+function addToCart(dressId) {
+    let startDate = document.getElementById("start-date").value;
+    let endDate = document.getElementById("end-date").value;
+
+    if (!startDate || !endDate) {
+        alert("Please select rental dates before adding to the cart.");
+        return;
+    }
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "/Dress_rental1/add_to_cart.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            document.getElementById("cart-message").innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send("dress_id=" + dressId + "&start_date=" + startDate + "&end_date=" + endDate);
 }
+
 
 // Add to Wishlist Function
 function addToWishlist(productId) {

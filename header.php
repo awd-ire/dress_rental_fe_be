@@ -25,7 +25,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <a href="#">Categories ▼</a>
             <ul class="dropdown-menu">
                 <li class="sub-dropdown">
-                    <a href="/Dress_rental1/subcategorym/subcategory.php">Men ▶</a>
+                    <a href="#">Men ▶</a>
                     <ul class="sub-dropdown-menu">
                         <li><a href="men-traditional.html">Traditional Wear</a></li>
                         <li><a href="men-party.html">Party Wear</a></li>
@@ -43,9 +43,9 @@ if (session_status() === PHP_SESSION_NONE) {
                 <li class="sub-dropdown">
                     <a href="/Dress_rental1/subcategoryk/subcategory.php">Kids ▶</a>
                     <ul class="sub-dropdown-menu">
-                        <li><a href="kids-traditional">Traditional Wear</a></li>
-                        <li><a href="kids-party">Party Wear</a></li>
-                        <li><a href="kids-wedding">Wedding Wear</a></li>
+                        <li onclick="redirectTo('Kids', 'Traditional')"> Traditional Wear</li>
+                        <li onclick="redirectTo('Kids', 'Party')">Party Wear</li>
+                        <li onclick="redirectTo('Kids', 'Traditional')">Wedding Wear</li>
                     </ul>
                 </li>
             </ul>
@@ -61,13 +61,20 @@ if (session_status() === PHP_SESSION_NONE) {
             <li><a href="/Dress_rental1/cuslogin/cuslogin.php">Login</a></li>  <!-- ✅ If not logged in, show Login -->
         <?php endif; ?>
     </ul>
-
     <div class="nav-icons">
         <div class="search-container">
             <i class="fas fa-search search-icon" onclick="toggleSearch()"></i>
             <input type="text" id="search-bar" class="search-bar" placeholder="Search...">
         </div>
         <a href="../wishlist.php"><i class="fas fa-heart"></i></a>
-        <a href="../cart.php"><i class="fas fa-shopping-cart"></i></a>
+        <a href="../cart/cart.php"><i class="fas fa-shopping-cart"></i></a>
     </div>
 </nav>
+<script>
+    function redirectTo(category, type) {
+            window.location.href = `../productlistiningpage/product-listing.php?category=${category}&type=${type}`;
+        }
+</script>
+</body>
+  
+</html>

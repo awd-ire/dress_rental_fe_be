@@ -15,5 +15,5 @@ $user_id = $_SESSION['user_id'];
 
 $conn->query("DELETE FROM cart WHERE user_id = '$user_id' AND dress_id = '$dress_id'");
 
-header("Location: cart.php");
+header("Location: /Dress_rental1/cart/cart.php");
 ?>

@@ -57,22 +57,7 @@ if (!$dress) {
             <p class="price">Price: ₹<?php echo htmlspecialchars($dress['price']); ?></p>
             <p class="rent">Rent: ₹<?php echo htmlspecialchars($dress['rental_price']); ?></p>
             <p class="deposit">Security Deposit: ₹<?php echo htmlspecialchars($dress['security_amount']); ?></p>
-
-            <!-- Size Selection -->
-            <label for="size">Choose Size:</label>
-            <select id="size">
-                <option>S</option>
-                <option>M</option>
-                <option>L</option>
-                <option>XL</option>
-            </select>
-            <button class="size-chart-btn" onclick="toggleSizeChart()">Size Chart</button>
-
-            <!-- Hidden Size Chart -->
-            <div id="size-chart" class="hidden">
-                <img src="size-chart.png" alt="Size Chart">
-            </div>
-
+            <p class="size">Size: ₹<?php echo htmlspecialchars($dress['size']); ?></p>
             <!-- Rental Calendar -->
             <label>Select Rental Dates:</label>
             <input type="date" id="start-date">
@@ -80,10 +65,11 @@ if (!$dress) {
 
             <!-- Buttons -->
             <div class="buttons">
-                <button class="add-to-cart" onclick="addToCart(<?php echo $dress['id']; ?>)">Add to Cart</button>
+            <button class onclick="addToCart(<?php echo $dress['id']; ?>)">Add to Cart</button>
+            <div id="cart-message">
+            </div> <!-- Place for showing success message -->
+
                 <button class="add-to-wishlist" onclick="addToWishlist(<?php echo $dress['id']; ?>)">Add to Wishlist</button>
-                <button class="rent-now">Rent Now</button>
-            </div>
         </div>
     </div>
 

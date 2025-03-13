@@ -23,13 +23,13 @@
             <img src="traditional.jpg" alt="Traditional Wear">
             <h2>Traditional Wear (Women)</h2>
         </div>
-        <div class="category-card" onclick="redirectTo('men', 'party')">
+        <div class="category-card" onclick="redirectTo('Women', 'party')">
             <img src="party.jpeg" alt="Party Wear">
             <h2>Party Wear (Men)</h2>
         </div>
-        <div class="category-card" onclick="redirectTo('kids', 'wedding')">
+        <div class="category-card" onclick="redirectTo('Women', 'wedding')">
             <img src="wedding.jpeg" alt="Wedding Wear">
-            <h2>Wedding Wear (Kids)</h2>
+            <h2>Wedding Wear </h2>
         </div>
     </div>
 
