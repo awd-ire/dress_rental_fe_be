@@ -101,7 +101,11 @@ function updateCartTotal() {
 
     document.getElementById("total-rent").textContent = totalRent;
     document.getElementById("total-security").textContent = totalSecurity;
+
+    // ✅ Call checkProceedButton() to enable/disable the button
+    checkProceedButton();
 }
+
 
 // Remove item from cart
 function removeFromCart(itemId) {
@@ -114,3 +118,15 @@ function removeFromCart(itemId) {
         .catch(error => console.error("Error removing item:", error));
 }
 
+function checkProceedButton() {
+    let totalRental = parseFloat(document.getElementById("total-rent").innerText) || 0;
+    let securityDeposit = parseFloat(document.getElementById("total-security").innerText) || 0;
+    let proceedBtn = document.querySelector(".proceedBtn"); // Ensure it selects the correct button
+
+    if (proceedBtn) {
+        proceedBtn.disabled = !(totalRental > 0 && securityDeposit > 0);
+    }
+}
+
+// ✅ Call checkProceedButton() on page load
+document.addEventListener("DOMContentLoaded", checkProceedButton);

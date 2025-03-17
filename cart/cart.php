@@ -86,8 +86,21 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
                 <p>Total Security Deposit: ₹<span id="total-security">0</span></p>
             </div>
             <a href="/Dress_rental1/address/address.php">
-            <button class="checkout-btn">Proceed</button>
+            <button class="proceedBtn">Proceed</button>
             </a>
+            <style>
+                .proceedBtn {
+    width: 100%;
+    padding: 10px;
+    background: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+            </style>
         <?php endif; ?>
     <?php endif; ?>
 
