@@ -38,7 +38,7 @@ if (!$dress) {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<?php include "C:/xampp/htdocs/Dress_rental1/header.php"; ?>
+<?php include "C:/xampp/htdocs/Dress_rental1/header/header.php"; ?>
 
     <div class="product-container">
         
@@ -46,7 +46,7 @@ if (!$dress) {
         <div class="product-gallery">
             <img id="main-image" src="/Dress_rental1/<?php echo htmlspecialchars($dress['image']); ?>" alt="Product Image">
             <div class="gallery-thumbnails">
-                <img src="<?php echo htmlspecialchars($dress['image']); ?>" alt="Thumbnail 1" onclick="changeImage(this)">
+                <img src="/Dress_rental1/<?php echo htmlspecialchars($dress['image']); ?>" alt="Thumbnail 1" onclick="changeImage(this)">
                
             </div>
         </div>
@@ -70,6 +70,7 @@ if (!$dress) {
             </div> <!-- Place for showing success message -->
 
                 <button class="add-to-wishlist" onclick="addToWishlist(<?php echo $dress['id']; ?>)">Add to Wishlist</button>
+                <script src="/Dress_rental1/wishlist/wishlist.js"> </script>
         </div>
     </div>
 
@@ -99,11 +100,11 @@ if (!$dress) {
         <h2>Frequently Bought Together</h2>
         <div class="product-list">
             <div class="related-product">
-                <img src="related1.jpg" alt="Product">
+                <img src="" alt="related_Product">
                 <p>Product Name</p>
             </div>
             <div class="related-product">
-                <img src="related2.jpg" alt="Product">
+                <img src="" alt="related_Product">
                 <p>Product Name</p>
             </div>
         </div>

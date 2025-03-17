@@ -11,13 +11,10 @@ include "C:/xampp/htdocs/Dress_rental1/config.php";
     <title>Clothing Rental</title>
     <link rel="stylesheet" href="home.css">
     <script src="script.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    
 <body>
     
    <!-- Navigation Bar -->
-   <?php include 'C:/xampp/htdocs/Dress_rental1/header.php'; ?>
+   <?php include "C:/xampp/htdocs/Dress_rental1/header/header.php"; ?>
 
     <!-- Hero Section -->
     <section class="hero">

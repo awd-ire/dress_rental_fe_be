@@ -45,12 +45,11 @@ $products = $conn->query("SELECT id, name, image, rental_price,security_amount F
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Listing</title>
     <link rel="stylesheet" href="product-listing.css">
-    <script src="product-listing.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="product-listing.js"></script>
 </head>
 <body>
     
-<?php include "C:/xampp/htdocs/Dress_rental1/header.php"; ?>
+<?php include "C:/xampp/htdocs/Dress_rental1/header/header.php"; ?>
 
     <div class="controls">
 
@@ -84,7 +83,7 @@ $products = $conn->query("SELECT id, name, image, rental_price,security_amount F
         function applyFilter() {
             let category = document.getElementById("categoryFilter").value;
             let type = document.getElementById("typeFilter").value;
-            window.location.href = `product-listing.php?category=${category}&type=${type}`;
+            window.location.href = `/productlistiningpage/product-listing.php?category=${category}&type=${type}`;
         }
     </script>
 

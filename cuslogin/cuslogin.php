@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p><a href="/Dress_rental1/cusforgotpassword/forgot-password.php">Forgot Password?</a></p>
             <p>OR</p>
             <button class="google-btn" onclick="googleLogin()">
-                <img src="google-icon.png" alt="Google"> Continue with Google
+                <img src="" alt="Google"> Continue with Google
             </button>
             <p>Don't have an account? <a href="/Dress_rental1/cusignup/signup.php">Sign Up</a></p>
         </div>

@@ -1,28 +1,28 @@
-document.addEventListener("DOMContentLoaded", function () {
-    fetchCartItems();
-});
-
 function fetchCartItems() {
-    fetch("fetch_cart.php")
+    fetch("cart.php")
         .then(response => response.json())
-        .then(cartData => {
-            if (cartData.error) {
-                document.getElementById("cart-items").innerHTML = `<p>${cartData.error}</p>`;
+        .then(data => {
+            if (data.error || !Array.isArray(data) || data.length === 0) {
+                document.getElementById("cart-items").innerHTML = `<p>${data.error || "Your cart is empty."}</p>`;
+                document.getElementById("total-rent").textContent = "0";
+                document.getElementById("total-security").textContent = "0";
                 return;
             }
 
-            displayCart(cartData);
-            validateDates(cartData);
+            cartData = data; // Store cart items globally
+            displayCart();
+            validateDates();
         })
         .catch(error => console.error("Error fetching cart items:", error));
 }
 
-function displayCart(cartData) {
+function displayCart() {
     let cartContainer = document.getElementById("cart-items");
     cartContainer.innerHTML = ""; // Clear previous items
 
     let selectElement = document.getElementById("keep-dresses");
     selectElement.innerHTML = ""; // Reset options
+
     for (let i = 1; i <= cartData.length; i++) {
         let option = document.createElement("option");
         option.value = i;
@@ -38,8 +38,8 @@ function displayCart(cartData) {
             <img src="/Dress_rental1/${item.image}" alt="${item.name}" style="width: 80px;">
             <div class="cart-product-details">
                 <h2>${item.name}</h2>
-                <p>Rent Per Day: ₹${item.price}</p>
-                <p>Security Deposit: ₹${item.security_deposit}</p>
+                <p>Rent Per Day: ₹${item.rental_price}</p>
+                <p>Security Deposit: ₹${item.security_amount}</p>
                 <p>Delivery Date: ${item.start_date}</p>
                 <p>Return Date: ${item.end_date}</p>
             </div>
@@ -49,10 +49,13 @@ function displayCart(cartData) {
         cartContainer.appendChild(cartItem);
     });
 
-    updateCartTotal(cartData);
+    // ✅ Now attach the event listener after the element is created
+    document.getElementById("keep-dresses").addEventListener("change", updateCartTotal);
+
+    updateCartTotal(); // Call after rendering cart items
 }
 
-function validateDates(cartData) {
+function validateDates() {
     let startDates = cartData.map(item => item.start_date);
     let endDates = cartData.map(item => item.end_date);
 
@@ -71,14 +74,30 @@ function validateDates(cartData) {
 }
 
 // Update total rent and security deposit
-function updateCartTotal(cartData) {
-    let keepCount = document.getElementById("keep-dresses").value;
-    keepCount = parseInt(keepCount) || 1;
+function updateCartTotal() {
+    if (!cartData || cartData.length === 0) {
+        document.getElementById("total-rent").textContent = "0";
+        document.getElementById("total-security").textContent = "0";
+        return;
+    }
 
-    let selectedItems = cartData.slice(0, keepCount);
+    let keepDressesSelect = document.getElementById("keep-dresses");
 
-    let totalRent = selectedItems.reduce((sum, item) => sum + item.price, 0);
-    let totalSecurity = selectedItems.reduce((sum, item) => sum + item.security_deposit, 0);
+    if (!keepDressesSelect || keepDressesSelect.options.length === 0) {
+        return; // Dropdown is not ready
+    }
+
+    let keepCount = parseInt(keepDressesSelect.value) || 1;
+
+    // Sort items by highest rent
+    let sortedCart = [...cartData].sort((a, b) => parseInt(b.rental_price) - parseInt(a.rental_price));
+
+    // Get the top N items based on selection
+    let selectedItems = sortedCart.slice(0, keepCount);
+
+    // Calculate total rent and security
+    let totalRent = selectedItems.reduce((sum, item) => sum + parseInt(item.rental_price), 0);
+    let totalSecurity = selectedItems.reduce((sum, item) => sum + parseInt(item.security_amount), 0);
 
     document.getElementById("total-rent").textContent = totalRent;
     document.getElementById("total-security").textContent = totalSecurity;
@@ -86,7 +105,7 @@ function updateCartTotal(cartData) {
 
 // Remove item from cart
 function removeFromCart(itemId) {
-    fetch(`remove_from_cart.php?id=${itemId}`)
+    fetch(`/Dress_rental1/cart/remove_from_cart.php?id=${itemId}`)
         .then(response => response.text())
         .then(result => {
             alert(result);
@@ -94,3 +113,4 @@ function removeFromCart(itemId) {
         })
         .catch(error => console.error("Error removing item:", error));
 }
+

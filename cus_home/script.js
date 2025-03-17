@@ -1,17 +1,14 @@
-// Toggle Hamburger Menu
-function toggleMenu() {
-    document.querySelector('.nav-links').classList.toggle('active');
-}
 
-// Toggle Search Box
-function toggleSearch() {
-    document.querySelector('.search-box').classList.toggle('active');
-}
 document.addEventListener("DOMContentLoaded", function () {
     const track = document.querySelector(".carousel-track");
     const items = document.querySelectorAll(".carousel-item");
     let index = 0;
-    
+    console.log("Carousel items found:", items.length); // Debugging check
+
+    if (items.length === 0) {
+        console.error("No carousel items found!");
+        return; // Stop execution if no items exist
+    }    
     function moveCarousel() {
         items.forEach((item, i) => {
             item.classList.remove("active");
@@ -28,12 +25,5 @@ document.addEventListener("DOMContentLoaded", function () {
     // Auto-slide every 2.5 seconds
     setInterval(moveCarousel, 2500);
 });
-function toggleMenu() {
-    let menu = document.getElementById("nav-menu");
-    menu.classList.toggle("active");
-}
-// Toggle Search Bar
-function toggleSearch() {
-    const searchBar = document.getElementById('search-bar');
-    searchBar.classList.toggle('active');
-}
+
+

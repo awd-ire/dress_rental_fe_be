@@ -1,13 +1,16 @@
 <?php
+
 include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: /Dress_rental1/cuslogin/cuslogin.php");
     exit;
 }
 
 $user_id = $_SESSION['user_id'];
-$result = $conn->query("SELECT dresses.*, cart.start_date, cart.end_date FROM cart 
+
+$result = $conn->query("SELECT dresses.*, cart.start_date, cart.end_date 
+                        FROM cart 
                         JOIN dresses ON cart.dress_id = dresses.id 
                         WHERE cart.user_id = '$user_id'");
 
@@ -34,9 +37,17 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
     <link rel="stylesheet" href="cart.css">
+    <script src="cart.js"></script>
+<script>
+    let cartData = <?= json_encode($cart_items, JSON_NUMERIC_CHECK); ?>;
+    if (!cartData || cartData.length === 0) {
+        cartData = [];
+    }
+  </script>
+ 
 </head>
 <body>
-<?php include "C:/xampp/htdocs/Dress_rental1/header.php"; ?>
+<?php include "C:/xampp/htdocs/Dress_rental1/header/header.php"; ?>
 
 
 <div class="cart-container">
@@ -54,8 +65,8 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
                     <p>Security: ₹<?= htmlspecialchars($row['security_amount']) ?></p>
                     <p>Delivery Date: <?= htmlspecialchars($row['start_date']) ?></p>
                     <p>Return Date: <?= htmlspecialchars($row['end_date']) ?></p>
-                    <a href="/Dress_rental1/remove_from_cart.php?id=<?= $row['id'] ?>">Remove</a>
-                    </div>
+                    <a href="/Dress_rental1/cart/remove_from_cart.php?id=<?= $row['id'] ?>">Remove</a>
+                </div>
             <?php endforeach; ?>
         </div>
 
@@ -64,6 +75,7 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
         <?php else: ?>
             <label for="keep-dresses">How many dresses will you keep?</label>
             <select id="keep-dresses" onchange="updateCartTotal()">
+                <option value="0">select</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -73,12 +85,16 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
                 <p>Total Rent: ₹<span id="total-rent">0</span></p>
                 <p>Total Security Deposit: ₹<span id="total-security">0</span></p>
             </div>
-
-            <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+            <a href="/Dress_rental1/address/address.php">
+            <button class="checkout-btn">Proceed</button>
+            </a>
         <?php endif; ?>
     <?php endif; ?>
 
     <br><a href="../cus_home/homepage.php">Add products to cart</a>
 </div>
 
-<script src="cart.js"></script>
+
+</body>
+
+</html>

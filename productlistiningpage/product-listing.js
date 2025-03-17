@@ -2,20 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const filterSelect = document.getElementById("filter");
     const sortSelect = document.getElementById("sort");
     const productList = document.getElementById("product-list");
-    
+
     let allProducts = Array.from(document.querySelectorAll(".product-card"));
 
-    function filterProducts() {
-        const category = filterSelect.value;
-        allProducts.forEach(product => {
-            if (category === "all" || product.dataset.category === category) {
-                product.style.display = "block";
-            } else {
-                product.style.display = "none";
-            }
-        });
-    }
+    // ✅ Function to filter products by category
 
+
+    // ✅ Function to sort products
     function sortProducts() {
         let sortedProducts = [...allProducts];
         const sortValue = sortSelect.value;
@@ -30,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (sortValue === "high-low") return priceB - priceA;
             if (sortValue === "name-asc") return nameA.localeCompare(nameB);
             if (sortValue === "name-desc") return nameB.localeCompare(nameA);
-            if (sortValue === "popular") return Math.random() - 0.5;  // Random order for now
+            if (sortValue === "popular") return Math.random() - 0.5;  // Random shuffle
 
             return 0;
         });
@@ -39,15 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sortedProducts.forEach(product => productList.appendChild(product));
     }
 
-    filterSelect.addEventListener("change", filterProducts);
+    // ✅ Attach event listeners if elements exist
     sortSelect.addEventListener("change", sortProducts);
 });
-function toggleMenu() {
-    let menu = document.getElementById("nav-menu");
-    menu.classList.toggle("active");
-}
-// Toggle Search Bar
-function toggleSearch() {
-    const searchBar = document.getElementById('search-bar');
-    searchBar.classList.toggle('active');
-}
+
