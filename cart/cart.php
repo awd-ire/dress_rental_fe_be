@@ -8,12 +8,10 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-
 $result = $conn->query("SELECT dresses.*, cart.start_date, cart.end_date 
                         FROM cart 
                         JOIN dresses ON cart.dress_id = dresses.id 
                         WHERE cart.user_id = '$user_id'");
-
 $cart_items = [];
 $start_dates = [];
 $end_dates = [];
@@ -80,6 +78,7 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
                 <option value="2">2</option>
                 <option value="3">3</option>
             </select>
+
 
             <div class="cart-total">
                 <p>Total Rent: ₹<span id="total-rent">0</span></p>

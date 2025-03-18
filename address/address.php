@@ -44,7 +44,7 @@ $security_deposit = isset($_SESSION['security_deposit']) ? $_SESSION['security_d
         </div>
 
         <!-- Checkout Form -->
-        <form action="checkout.php" method="post">
+        <form action="../checkout/checkout.php" method="post">
             <div id="address-list">
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <div class="address-item" id="address-<?php echo $row['id']; ?>">
