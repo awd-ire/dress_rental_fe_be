@@ -14,11 +14,13 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
-?>
-<?php
 
-$total_rental = isset($_SESSION['total_rental']) ? $_SESSION['total_rental'] : 0;
-$security_deposit = isset($_SESSION['security_deposit']) ? $_SESSION['security_deposit'] : 0;
+// Store selected address in session
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_address'])) {
+    $_SESSION['selected_address'] = $_POST['selected_address'];
+    header("Location: ../checkout/checkout.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +32,6 @@ $security_deposit = isset($_SESSION['security_deposit']) ? $_SESSION['security_d
     <link rel="stylesheet" href="address.css">
 </head>
 <body>
-
     <div class="address-container">
         <div class="back-button" onclick="goBack()">&#8592; Back</div>
         <h2>Select Address</h2>
@@ -44,7 +45,7 @@ $security_deposit = isset($_SESSION['security_deposit']) ? $_SESSION['security_d
         </div>
 
         <!-- Checkout Form -->
-        <form action="../checkout/checkout.php" method="post">
+        <form method="post">
             <div id="address-list">
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <div class="address-item" id="address-<?php echo $row['id']; ?>">
@@ -52,11 +53,7 @@ $security_deposit = isset($_SESSION['security_deposit']) ? $_SESSION['security_d
                             <input type="radio" name="selected_address" value="<?php echo $row['id']; ?>" required>
                             <?php echo "{$row['full_name']}, {$row['phone']}, {$row['building']} {$row['road']} {$row['area']} {$row['city']} {$row['state']}-{$row['pincode']}"; ?>
                         </label>
-
-                        <!-- Edit Address -->
                         <a href="edit_address.php?id=<?php echo $row['id']; ?>" class="edit-btn">Edit</a>
-
-                        <!-- Delete Button (AJAX) -->
                         <button type="button" class="delete-btn" onclick="deleteAddress(<?php echo $row['id']; ?>)">Delete</button>
                     </div>
                 <?php endwhile; ?>
@@ -71,35 +68,23 @@ $security_deposit = isset($_SESSION['security_deposit']) ? $_SESSION['security_d
         }
 
         function deleteAddress(addressId) {
-    console.log("Delete function called with addressId:", addressId); // Check if function is triggered
-
-    if (confirm("Are you sure you want to delete this address?")) {
-        console.log("User confirmed deletion."); // Check if user confirmed
-
-        fetch('delete_address.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'address_id=' + addressId
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log("Server response:", data); // Log the server response
-
-            if (data.includes("success")) {
-                console.log("Address deleted successfully.");
-                document.getElementById("address-" + addressId).remove();
-            } else {
-                console.log("Deletion failed.");
-                alert("Error deleting address.");
+            if (confirm("Are you sure you want to delete this address?")) {
+                fetch('delete_address.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'address_id=' + addressId
+                })
+                .then(response => response.text())
+                .then(data => {
+                    if (data.includes("success")) {
+                        document.getElementById("address-" + addressId).remove();
+                    } else {
+                        alert("Error deleting address.");
+                    }
+                })
+                .catch(error => console.error("Fetch error:", error));
             }
-        })
-        .catch(error => console.error("Fetch error:", error));
-    } else {
-        console.log("User canceled deletion.");
-    }
-}
-
+        }
     </script>
-
 </body>
 </html>

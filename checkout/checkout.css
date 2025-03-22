@@ -16,16 +16,15 @@ body {
 
 h2, h3 {
     text-align: center;
+    color: #333;
 }
 
-/* Checkout Layout */
 .checkout-content {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* Dynamic Dress Details (Grid Layout) */
 .dress-details {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -54,7 +53,13 @@ h2, h3 {
     margin-top: 10px;
 }
 
-/* Order Summary & Payment */
+#user-address, .rental-duration {
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
 .bill-summary, .payment-options {
     background: #fff;
     padding: 15px;
@@ -65,20 +70,23 @@ h2, h3 {
 .bill-summary p {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
+    font-size: 16px;
     margin: 5px 0;
 }
 
 .bill-summary strong {
-    font-size: 16px;
+    font-size: 24px;
 }
 
+.payment-options form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
 
-.order-summary, .payment-options {
-    background: #fff;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+.payment-options label {
+    font-size: 14px;
 }
 
 button {
@@ -96,7 +104,6 @@ button:hover {
     background-color: #e65c00;
 }
 
-/* Responsive Design */
 @media (max-width: 900px) {
     .checkout-container {
         width: 90%;
@@ -105,7 +112,7 @@ button:hover {
 }
 
 @media (max-width: 600px) {
-    .summary-payment {
-        order: 3; /* Moves billing summary and payment down */
+    .checkout-content {
+        flex-direction: column;
     }
 }

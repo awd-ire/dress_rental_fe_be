@@ -28,7 +28,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 <a href="#">Categories ▼</a>
                 <ul class="dropdown-menu">
                     <li class="sub-dropdown">
-                        <a href="#">Men ▶</a>
+                        <a href="/Dress_rental1/subcategorym/subcategory.php">Men ▶</a>
                         <ul class="sub-dropdown-menu">
                             <li onclick="redirectTo('Men', 'Traditional')"><a>Traditional Wear</a></li>
                             <li onclick="redirectTo('Men', 'Party')"><a>Party Wear</a></li>

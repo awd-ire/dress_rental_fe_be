@@ -74,33 +74,33 @@ function validateDates() {
 }
 
 // Update total rent and security deposit
+// Update total rent and security deposit
 function updateCartTotal() {
-    if (!cartData || cartData.length === 0) {
-        document.getElementById("total-rent").textContent = "0";
-        document.getElementById("total-security").textContent = "0";
+    let selectedDresses = parseInt(document.getElementById("keep-dresses").value) || 0;
+    let cartData = JSON.parse(document.getElementById("cart-items").getAttribute("data-cart"));
+    
+    if (selectedDresses === 0) {
+        document.getElementById("total-rent").innerText = "0";
+        document.getElementById("total-security").innerText = "0";
         return;
     }
 
-    let keepDressesSelect = document.getElementById("keep-dresses");
+    // Sort dresses by rental price (Highest First)
+    cartData.sort((a, b) => parseFloat(b.rental_price) - parseFloat(a.rental_price));
 
-    if (!keepDressesSelect || keepDressesSelect.options.length === 0) {
-        return; // Dropdown is not ready
-    }
+    // Pick the top `selectedDresses` items
+    let selectedItems = cartData.slice(0, selectedDresses);
+    
+    let totalRent = selectedItems.reduce((sum, item) => sum + parseFloat(item.rental_price), 0);
+    let totalSecurity = selectedItems.reduce((sum, item) => sum + parseFloat(item.security_amount), 0);
 
-    let keepCount = parseInt(keepDressesSelect.value) || 1;
+    document.getElementById("total-rent").innerText = totalRent.toFixed(2);  // Ensure it displays as a proper number
+    document.getElementById("total-security").innerText = totalSecurity.toFixed(2);
 
-    // Sort items by highest rent
-    let sortedCart = [...cartData].sort((a, b) => parseInt(b.rental_price) - parseInt(a.rental_price));
-
-    // Get the top N items based on selection
-    let selectedItems = sortedCart.slice(0, keepCount);
-
-    // Calculate total rent and security
-    let totalRent = selectedItems.reduce((sum, item) => sum + parseInt(item.rental_price), 0);
-    let totalSecurity = selectedItems.reduce((sum, item) => sum + parseInt(item.security_amount), 0);
-
-    document.getElementById("total-rent").textContent = totalRent;
-    document.getElementById("total-security").textContent = totalSecurity;
+    // Store values in hidden inputs
+    document.getElementById("keep-dresses-input").value = selectedDresses;
+    document.getElementById("total-rent-input").value = totalRent.toFixed(2);
+    document.getElementById("total-security-input").value = totalSecurity.toFixed(2);
 
     // ✅ Call checkProceedButton() to enable/disable the button
     checkProceedButton();
@@ -119,14 +119,24 @@ function removeFromCart(itemId) {
 }
 
 function checkProceedButton() {
-    let totalRental = parseFloat(document.getElementById("total-rent").innerText) || 0;
-    let securityDeposit = parseFloat(document.getElementById("total-security").innerText) || 0;
-    let proceedBtn = document.querySelector(".proceedBtn"); // Ensure it selects the correct button
+    let totalRentElement = document.getElementById("total-rent");
+    let totalSecurityElement = document.getElementById("total-security");
+    let proceedBtn = document.querySelector(".proceedBtn");
 
-    if (proceedBtn) {
-        proceedBtn.disabled = !(totalRental > 0 && securityDeposit > 0);
+    // Check if the elements exist before accessing their properties
+    if (!totalRentElement || !totalSecurityElement || !proceedBtn) {
+        console.warn("Required elements not found in DOM. Skipping checkProceedButton.");
+        return;
     }
+
+    let totalRental = parseFloat(totalRentElement.innerText) || 0;
+    let securityDeposit = parseFloat(totalSecurityElement.innerText) || 0;
+
+    proceedBtn.disabled = !(totalRental > 0 && securityDeposit > 0);
 }
 
-// ✅ Call checkProceedButton() on page load
-document.addEventListener("DOMContentLoaded", checkProceedButton);
+// ✅ Call checkProceedButton() only after DOM is fully loaded
+document.addEventListener("DOMContentLoaded", () => {
+    checkProceedButton();
+});
+

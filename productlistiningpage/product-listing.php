@@ -7,7 +7,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'all';
 $type = isset($_GET['type']) ? $_GET['type'] : 'all';
 
 // Prepare SQL query dynamically
-$sql = "SELECT * FROM dresses WHERE available = 1";
+$sql = "SELECT * FROM dresses where available=1";
 $params = [];
 $types = "";
 

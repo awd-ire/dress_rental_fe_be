@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
 
 if (!isset($_SESSION['user_id'])) {
@@ -12,6 +12,7 @@ $result = $conn->query("SELECT dresses.*, cart.start_date, cart.end_date
                         FROM cart 
                         JOIN dresses ON cart.dress_id = dresses.id 
                         WHERE cart.user_id = '$user_id'");
+
 $cart_items = [];
 $start_dates = [];
 $end_dates = [];
@@ -22,7 +23,6 @@ while ($row = $result->fetch_assoc()) {
     $end_dates[] = $row['end_date'];
 }
 
-// Check if all dresses have the same delivery and return date
 $unique_start_dates = array_unique($start_dates);
 $unique_end_dates = array_unique($end_dates);
 $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
@@ -36,17 +36,15 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
     <title>Shopping Cart</title>
     <link rel="stylesheet" href="cart.css">
     <script src="cart.js"></script>
-<script>
-    let cartData = <?= json_encode($cart_items, JSON_NUMERIC_CHECK); ?>;
-    if (!cartData || cartData.length === 0) {
-        cartData = [];
-    }
-  </script>
- 
+    <script>
+        let cartData = <?= json_encode($cart_items, JSON_NUMERIC_CHECK); ?>;
+        if (!cartData || cartData.length === 0) {
+            cartData = [];
+        }
+    </script>
 </head>
 <body>
 <?php include "C:/xampp/htdocs/Dress_rental1/header/header.php"; ?>
-
 
 <div class="cart-container">
     <h1>Your Cart</h1>
@@ -54,7 +52,7 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
     <?php if (empty($cart_items)): ?>
         <p>Your cart is empty.</p>
     <?php else: ?>
-        <div id="cart-items">
+        <div id="cart-items" data-cart='<?= json_encode($cart_items) ?>'>
             <?php foreach ($cart_items as $row): ?>
                 <div class="cart-item">
                     <img src="/Dress_rental1/<?= htmlspecialchars($row['image']) ?>" width="100">
@@ -73,40 +71,44 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
         <?php else: ?>
             <label for="keep-dresses">How many dresses will you keep?</label>
             <select id="keep-dresses" onchange="updateCartTotal()">
-                <option value="0">select</option>
+                <option value="0">Select</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
             </select>
 
-
             <div class="cart-total">
                 <p>Total Rent: ₹<span id="total-rent">0</span></p>
                 <p>Total Security Deposit: ₹<span id="total-security">0</span></p>
             </div>
-            <a href="/Dress_rental1/address/address.php">
-            <button class="proceedBtn">Proceed</button>
+
+            <form id="cart-form" action="/Dress_rental1/address/address.php" method="POST">
+                <input type="hidden" name="keep_dresses" id="keep-dresses-input">
+                <input type="hidden" name="total_rental_price" id="total-rent-input">
+                <input type="hidden" name="total_security_amount" id="total-security-input">
+            </form>
+
+            <a href="#" onclick="document.getElementById('cart-form').submit();">
+                <button class="proceedBtn">Proceed</button>
             </a>
+
             <style>
                 .proceedBtn {
-    width: 100%;
-    padding: 10px;
-    background: green;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    border-radius: 5px;
-    margin-top: 10px;
-}
+                    width: 100%;
+                    padding: 10px;
+                    background: green;
+                    color: white;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 1.2rem;
+                    border-radius: 5px;
+                    margin-top: 10px;
+                }
             </style>
         <?php endif; ?>
     <?php endif; ?>
 
     <br><a href="../cus_home/homepage.php">Add products to cart</a>
 </div>
-
-
 </body>
-
 </html>
