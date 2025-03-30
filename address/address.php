@@ -21,7 +21,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_address'])) {
     header("Location: ../checkout/checkout.php");
     exit();
 }
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $_SESSION['keep_dresses'] = $_POST['keep_dresses'] ?? null;
+    $_SESSION['total_rental_price'] = $_POST['total_rental_price'] ?? null;
+    $_SESSION['total_security_amount'] = $_POST['total_security_amount'] ?? null;
+    //print_r($_POST);
+}
+//print_r($_POST);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

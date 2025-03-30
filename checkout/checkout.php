@@ -10,8 +10,9 @@ if (!isset($_SESSION['user_id'])) {
 // Ensure required session data is available
 if (!isset($_SESSION['keep_dresses']) || !isset($_SESSION['total_rental_price']) || !isset($_SESSION['total_security_amount'])) {
     echo "Missing session data.";
-    exit();
+    
 }
+print_r($_POST);
 
 $keepDresses = $_SESSION['keep_dresses'];
 $totalRent = $_SESSION['total_rental_price'];
