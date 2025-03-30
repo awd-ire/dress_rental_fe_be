@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #faf3dc;
+    padding: 20px;
+}
+
+.navbar {
+    background: #3d7af0;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+}
+
+.left-section {
+    width: 65%;
+}
+
+.right-section {
+    width: 30%;
+}
+
+.box {
+    background: white;
+    padding: 17px;
+    margin: 17px 0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border:1.5px solid black;
+    
+}
+
+
+.bill-summary table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bill-summary th, .bill-summary td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.bill-summary th {
+    background: #f4e3a1;
+}
+
+.feedback textarea {
+    width: 100%;
+    height: 50px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+.items img {
+    width: 80px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.items div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.heading{
+    padding-top: 30px;
+    background: rgb(252,176,69);
+    background: linear-gradient(90deg, rgba(252,176,69,1) 55%, rgba(0,0,0,1) 90%);;
+    -webkit-background-clip: text;
+    color: transparent;         
+}
+.heading2{
+    background: rgb(252,176,69);
+    background: linear-gradient(90deg, rgba(252,176,69,1) 55%, rgba(187,66,12,1) 90%);
+    -webkit-background-clip: text;
+    color: transparent;  
+}
+
+.adressbox{
+    padding-top: 50px;
+}
+p{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}

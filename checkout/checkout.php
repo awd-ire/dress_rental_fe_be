@@ -8,16 +8,24 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Ensure required session data is available
-if (!isset($_SESSION['keep_dresses']) || !isset($_SESSION['total_rental_price']) || !isset($_SESSION['total_security_amount'])) {
-    echo "Missing session data.";
-    
+if (!isset($_SESSION['keep_dresses'], $_SESSION['total_rental_price'], $_SESSION['total_security_amount'])) {
+    die("Missing session data. Please restart the checkout process.");
 }
-print_r($_POST);
 
 $keepDresses = $_SESSION['keep_dresses'];
 $totalRent = $_SESSION['total_rental_price'];
 $totalSecurity = $_SESSION['total_security_amount'];
 $user_id = $_SESSION['user_id']; 
+// Store calculated values in session before displaying the checkout page
+$_SESSION['total_amount'] = $total_amount;
+$_SESSION['taxes'] = $taxes;
+
+// Store total rent and taxes in session
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $_SESSION['total_amount'] = $_POST['total_amount'] ?? null;
+    $_SESSION['taxes'] = $_POST['taxes'] ?? null;
+    echo "fuck u";
+}
 
 // Fetch cart items for the logged-in user
 $sql = "SELECT c.dress_id, d.image, d.name, d.description, d.size, c.start_date, c.end_date, 
@@ -25,7 +33,12 @@ $sql = "SELECT c.dress_id, d.image, d.name, d.description, d.size, c.start_date,
         FROM cart c
         JOIN dresses d ON c.dress_id = d.id
         WHERE c.user_id = ?";
+
 $stmt = $conn->prepare($sql);
+if (!$stmt) {
+    die("SQL Error: " . $conn->error);
+}
+
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -49,7 +62,12 @@ if (isset($_SESSION['selected_address'])) {
     $address_id = $_SESSION['selected_address'];
     $address_query = "SELECT full_name, phone, email, building, road, landmark, area, city, state, pincode 
                       FROM addresses WHERE id = ? AND user_id = ?";
+
     $address_stmt = $conn->prepare($address_query);
+    if (!$address_stmt) {
+        die("SQL Error: " . $conn->error);
+    }
+
     $address_stmt->bind_param("ii", $address_id, $user_id);
     $address_stmt->execute();
     $address_result = $address_stmt->get_result();
@@ -140,8 +158,8 @@ $total_amount = $totalRent + $totalSecurity + $platform_fee + $packaging_fee + $
                 <div class="payment-options">
                     <h3>Payment Method</h3>
                     <form action="../process_rent/process_rent.php" method="POST">
-                        <label><input type="radio" name="payment_method" value="online" checked> Online Payment</label>
-                        <label><input type="radio" name="payment_method" value="cod"> Cash on Delivery (COD)</label>
+                        <label><input type="radio" name="payment_method" value="Online" checked> Online Payment</label>
+                        <label><input type="radio" name="payment_method" value="COD"> Cash on Delivery (COD)</label>
                         <input type="hidden" name="total_amount" value="<?= $total_amount; ?>">
                         <button type="submit" name="place_order">Place Order</button>
                     </form>
