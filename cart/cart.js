@@ -1,3 +1,4 @@
+// Fetch Cart Items
 function fetchCartItems() {
     fetch("cart.php")
         .then(response => response.json())
@@ -16,11 +17,23 @@ function fetchCartItems() {
         .catch(error => console.error("Error fetching cart items:", error));
 }
 
+// Display Cart Items
 function displayCart() {
     let cartContainer = document.getElementById("cart-items");
+    if (!cartContainer) {
+        console.error("cart-items container not found.");
+        return;
+    }
+
+    cartContainer.setAttribute("data-cart", JSON.stringify(cartData));
     cartContainer.innerHTML = ""; // Clear previous items
 
     let selectElement = document.getElementById("keep-dresses");
+    if (!selectElement) {
+        console.error("keep-dresses dropdown not found.");
+        return;
+    }
+
     selectElement.innerHTML = ""; // Reset options
 
     for (let i = 1; i <= cartData.length; i++) {
@@ -49,12 +62,12 @@ function displayCart() {
         cartContainer.appendChild(cartItem);
     });
 
-    // ✅ Now attach the event listener after the element is created
     document.getElementById("keep-dresses").addEventListener("change", updateCartTotal);
 
     updateCartTotal(); // Call after rendering cart items
 }
 
+// Validate Dates
 function validateDates() {
     let startDates = cartData.map(item => item.start_date);
     let endDates = cartData.map(item => item.end_date);
@@ -73,41 +86,38 @@ function validateDates() {
     }
 }
 
-// Update total rent and security deposit
-// Update total rent and security deposit
+// Update Total Rent & Security
 function updateCartTotal() {
     let selectedDresses = parseInt(document.getElementById("keep-dresses").value) || 0;
-    let cartData = JSON.parse(document.getElementById("cart-items").getAttribute("data-cart"));
+    let cartContainer = document.getElementById("cart-items");
+    if (!cartContainer) return;
     
+    let cartData = JSON.parse(cartContainer.getAttribute("data-cart"));
+
     if (selectedDresses === 0) {
         document.getElementById("total-rent").innerText = "0";
         document.getElementById("total-security").innerText = "0";
         return;
     }
 
-    // Sort dresses by rental price (Highest First)
     cartData.sort((a, b) => parseFloat(b.rental_price) - parseFloat(a.rental_price));
 
-    // Pick the top `selectedDresses` items
     let selectedItems = cartData.slice(0, selectedDresses);
     
     let totalRent = selectedItems.reduce((sum, item) => sum + parseFloat(item.rental_price), 0);
     let totalSecurity = selectedItems.reduce((sum, item) => sum + parseFloat(item.security_amount), 0);
 
-    document.getElementById("total-rent").innerText = totalRent.toFixed(2);  // Ensure it displays as a proper number
+    document.getElementById("total-rent").innerText = totalRent.toFixed(2);
     document.getElementById("total-security").innerText = totalSecurity.toFixed(2);
 
-    // Store values in hidden inputs
     document.getElementById("keep-dresses-input").value = selectedDresses;
     document.getElementById("total-rent-input").value = totalRent.toFixed(2);
     document.getElementById("total-security-input").value = totalSecurity.toFixed(2);
 
-    // ✅ Call checkProceedButton() to enable/disable the button
     checkProceedButton();
 }
 
-
-// Remove item from cart
+// Remove from Cart
 function removeFromCart(itemId) {
     fetch(`/Dress_rental1/cart/remove_from_cart.php?id=${itemId}`)
         .then(response => response.text())
@@ -118,25 +128,52 @@ function removeFromCart(itemId) {
         .catch(error => console.error("Error removing item:", error));
 }
 
+// Enable/Disable Proceed Button
 function checkProceedButton() {
-    let totalRentElement = document.getElementById("total-rent");
-    let totalSecurityElement = document.getElementById("total-security");
     let proceedBtn = document.querySelector(".proceedBtn");
 
-    // Check if the elements exist before accessing their properties
-    if (!totalRentElement || !totalSecurityElement || !proceedBtn) {
-        console.warn("Required elements not found in DOM. Skipping checkProceedButton.");
+    if (!proceedBtn) {
+        console.warn("Proceed button not found.");
         return;
     }
 
-    let totalRental = parseFloat(totalRentElement.innerText) || 0;
-    let securityDeposit = parseFloat(totalSecurityElement.innerText) || 0;
+    let totalRental = parseFloat(document.getElementById("total-rent").innerText) || 0;
+    let securityDeposit = parseFloat(document.getElementById("total-security").innerText) || 0;
 
     proceedBtn.disabled = !(totalRental > 0 && securityDeposit > 0);
 }
 
-// ✅ Call checkProceedButton() only after DOM is fully loaded
-document.addEventListener("DOMContentLoaded", () => {
-    checkProceedButton();
-});
+// Save Cart State
+function saveCartState() {
+    sessionStorage.setItem("keepDresses", document.getElementById("keep-dresses").value);
+    sessionStorage.setItem("totalRent", document.getElementById("total-rent").innerText);
+    sessionStorage.setItem("totalSecurity", document.getElementById("total-security").innerText);
+}
 
+// Restore Cart State
+function restoreCartState() {
+    let savedKeepDresses = sessionStorage.getItem("keepDresses") || 0;
+    let savedTotalRent = sessionStorage.getItem("totalRent") || 0;
+    let savedTotalSecurity = sessionStorage.getItem("totalSecurity") || 0;
+
+    document.getElementById("keep-dresses").value = savedKeepDresses;
+    document.getElementById("total-rent").innerText = savedTotalRent;
+    document.getElementById("total-security").innerText = savedTotalSecurity;
+}
+
+// Single `DOMContentLoaded`
+document.addEventListener("DOMContentLoaded", () => {
+    restoreCartState();
+    updateCartTotal();
+    checkProceedButton();
+
+    let proceedBtn = document.querySelector(".proceedBtn");
+    if (proceedBtn) {
+        proceedBtn.addEventListener("click", saveCartState);
+    }
+
+    let keepDresses = document.getElementById("keep-dresses");
+    if (keepDresses) {
+        keepDresses.addEventListener("change", updateCartTotal);
+    }
+});

@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-if (!isset($_GET['rent_id'])) {
+if (isset($_GET['rent_id'])) {
     die("Invalid rental request!");
 }
 

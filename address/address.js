@@ -1,8 +1,3 @@
-
-        function goBack() {
-            window.history.back();
-        }
-
         function deleteAddress(addressId) {
             if (confirm("Are you sure you want to delete this address?")) {
                 fetch('delete_address.php', {

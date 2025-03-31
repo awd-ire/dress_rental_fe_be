@@ -55,13 +55,19 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
         <div id="cart-items" data-cart='<?= json_encode($cart_items) ?>'>
             <?php foreach ($cart_items as $row): ?>
                 <div class="cart-item">
-                    <img src="/Dress_rental1/<?= htmlspecialchars($row['image']) ?>" width="100">
-                    <p>Name: <?= htmlspecialchars($row['name']) ?></p>
+                    <a href="/Dress_rental1/product_view.php?id=<?= $row['id'] ?>">
+                        <img src="/Dress_rental1/<?= htmlspecialchars($row['image']) ?>" width="100">
+                    </a>
+                    <p>
+                        <a href="/Dress_rental1/product_view.php?id=<?= $row['id'] ?>">
+                            Name: <?= htmlspecialchars($row['name']) ?>
+                        </a>
+                    </p>
                     <p>Rent: ₹<?= htmlspecialchars($row['rental_price']) ?></p>
                     <p>Security: ₹<?= htmlspecialchars($row['security_amount']) ?></p>
                     <p>Delivery Date: <?= htmlspecialchars($row['start_date']) ?></p>
                     <p>Return Date: <?= htmlspecialchars($row['end_date']) ?></p>
-                    <a href="/Dress_rental1/cart/remove_from_cart.php?id=<?= $row['id'] ?>">Remove</a>
+                    <a href="/Dress_rental1/cart/remove_from_cart.php?id=<?= $row['id']">Remove</a>
                 </div>
             <?php endforeach; ?>
         </div>

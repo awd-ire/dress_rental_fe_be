@@ -42,6 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         echo "Address added successfully.";
+        header("Location: address.php");
+        
 
     } else {
         echo "Error adding address.";

@@ -16,9 +16,7 @@ $keepDresses = $_SESSION['keep_dresses'];
 $totalRent = $_SESSION['total_rental_price'];
 $totalSecurity = $_SESSION['total_security_amount'];
 $user_id = $_SESSION['user_id']; 
-// Store calculated values in session before displaying the checkout page
-$_SESSION['total_amount'] = $total_amount;
-$_SESSION['taxes'] = $taxes;
+
 
 // Store total rent and taxes in session
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -26,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['taxes'] = $_POST['taxes'] ?? null;
     echo "fuck u";
 }
-
 // Fetch cart items for the logged-in user
 $sql = "SELECT c.dress_id, d.image, d.name, d.description, d.size, c.start_date, c.end_date, 
                d.price, d.rental_price, d.security_amount 
@@ -95,6 +92,10 @@ $taxes = round($totalRent * 0.18);
 
 // Calculate total amount
 $total_amount = $totalRent + $totalSecurity + $platform_fee + $packaging_fee + $taxes + $delivery_fee;
+
+// Store calculated values in session before displaying the checkout page
+$_SESSION['total_amount'] = $total_amount;
+$_SESSION['taxes'] = $taxes;
 ?>
 
 <!DOCTYPE html>

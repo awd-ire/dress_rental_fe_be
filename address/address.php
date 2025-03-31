@@ -71,28 +71,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
-        function goBack() {
-            window.history.back();
-        }
 
         function deleteAddress(addressId) {
-            if (confirm("Are you sure you want to delete this address?")) {
-                fetch('delete_address.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'address_id=' + addressId
-                })
-                .then(response => response.text())
-                .then(data => {
-                    if (data.includes("success")) {
-                        document.getElementById("address-" + addressId).remove();
-                    } else {
-                        alert("Error deleting address.");
-                    }
-                })
-                .catch(error => console.error("Fetch error:", error));
+    if (confirm("Are you sure you want to delete this address?")) {
+        fetch('delete_address.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'address_id=' + addressId
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data.includes("success")) {
+                location.reload(); // Reloads the page after deletion
+            } else {
+                alert("Error deleting address.");
             }
-        }
+        })
+        .catch(error => console.error("Fetch error:", error));
+    }
+}
+
     </script>
 </body>
 </html>
