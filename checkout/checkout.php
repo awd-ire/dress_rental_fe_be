@@ -1,6 +1,7 @@
 <?php
 session_start();
 header("Cache-Control: no cache");
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: /Dress_rental1/cuslogin/cuslogin.php");
     exit;
@@ -9,7 +10,7 @@ $user_id = $_SESSION['user_id'];
 include "C:/xampp/htdocs/Dress_rental1/config.php";
 // Ensure required session data is available
 if (!isset($_SESSION['keep_dresses'], $_SESSION['total_rental_price'], $_SESSION['total_security_amount'])) {
-    die("Missing session data. Please restart the checkout process.");
+     echo ("Missing session data. Please restart the checkout process.");
 }
 
 $keepDresses = $_SESSION['keep_dresses'];
@@ -125,7 +126,7 @@ $_SESSION['taxes'] = $taxes;
                         </div>
                     <?php endforeach; ?>
                 <?php else : ?>
-                    <?php redirect("Location: ../cus_home/homepage.php");
+                    <?php header("Location: ../cus_home/homepage.php");
                     exit(); ?>
                     
                 <?php endif; ?>
@@ -170,5 +171,11 @@ $_SESSION['taxes'] = $taxes;
             </div>
         </div>
     </div>
+    <script>
+        if (performance.navigation.type === 2) {
+        location.reload(true); // Forces refresh when user goes back
+    }
+    </script>
+
 </body>
 </html>

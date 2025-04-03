@@ -1,13 +1,13 @@
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php";
 session_start();
-
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id']) || !isset($_POST['id'])) {
     die("Access denied.");
-}
+}else {
+$user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
 
 $address_id = $_POST['id'];
-$user_id = $_SESSION['user_id'];
 
 $full_name = $_POST['full_name'];
 $phone = $_POST['phone'];
@@ -31,5 +31,6 @@ if ($stmt->execute()) {
     header("Location: ../address/address.php"); // Redirect back to the address selection page
 } else {
     echo "Error updating address.";
+}
 }
 ?>

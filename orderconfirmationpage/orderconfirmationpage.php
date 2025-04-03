@@ -1,13 +1,12 @@
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php";
-
-// Check if user is logged in
+session_start();
+header("Cache-Control: no-cache, no-store, must-revalidate");
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../cuslogin/cuslogin.php");
-    exit();
-}
-
+    header("Location: /Dress_rental1/cuslogin/cuslogin.php");
+    exit;
+} else {
 $user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
 
 // Fetch the latest rental details
 $sql = "SELECT r.id AS rent_id, r.start_date, r.end_date, r.total_rent, r.total_security, 
@@ -39,6 +38,8 @@ $ordered_items = $item_result->fetch_all(MYSQLI_ASSOC);
 $user_address = "{$order['full_name']}, {$order['phone']}, {$order['email']}, "
                . "{$order['building']}, {$order['road']}, {$order['landmark']}, "
                . "{$order['area']}, {$order['city']}, {$order['state']}, {$order['pincode']}";
+
+            }            
 ?>
 
 <!DOCTYPE html>

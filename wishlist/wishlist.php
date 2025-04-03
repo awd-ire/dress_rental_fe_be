@@ -1,12 +1,15 @@
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
-
+session_start();
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id'])) {
-    die("Please login to view your wishlist. <a href='login.php'>Login</a>");
-}
-
+    header("Location: /Dress_rental1/cuslogin/cuslogin.php");
+    exit;
+} else {
 $user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
+
 $result = $conn->query("SELECT dresses.* FROM wishlist JOIN dresses ON wishlist.dress_id = dresses.id WHERE wishlist.user_id='$user_id'");
+}
 ?>
 
 <!DOCTYPE html>

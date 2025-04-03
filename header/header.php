@@ -10,9 +10,9 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clothing Rental</title>
     <link rel="stylesheet" href="/Dress_rental1/header/header.css">
-    <script src="/Dress_rental1/header/header.js"></script>
+    <script defer src="/Dress_rental1/header/header.js"></script>
     <link rel="stylesheet" href="/Dress_rental1/fontawesome-free-6.7.2-web/css/all.min.css">
-    <script src="/Dress_rental1/fontawesome-free-6.7.2-web/js/all.min.js" crossorigin="anonymous"></script>
+    <script defer src="/Dress_rental1/fontawesome-free-6.7.2-web/js/all.min.js"></script>
 </head>
 <body>
 
@@ -23,11 +23,11 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
         <div class="logo">Rent-A-Veil</div>
         <ul id="nav-menu">
-            <li><a href="/Dress_rental1//cus_home/homepage.php">Home</a></li>
+            <li><a href="/Dress_rental1/cus_home/homepage.php">Home</a></li>
             <li class="dropdown">
+                <a href="#">Categories ▼</a>
                 <ul class="dropdown-menu">
                     <li class="sub-dropdown">
-                        <a href="#">Categorie      s ▼</a>
                         <a href="/Dress_rental1/subcategorym/subcategory.php">Men ▶</a>
                         <ul class="sub-dropdown-menu">
                             <li onclick="redirectTo('Men', 'Traditional')"><a>Traditional Wear</a></li>
@@ -53,15 +53,14 @@ if (session_status() === PHP_SESSION_NONE) {
                     </li>
                 </ul>
             </li>
-            <li><a href=#>Accessories</a></li>
-            <li><a href=#>Contact Us</a></li>
-            <li><a href=#>Account</a></li>
+            <li><a href="#">Accessories</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Account</a></li>
             
-            <!-- ✅ Dynamic Login/Logout -->
             <?php if (isset($_SESSION['user_id'])): ?>
-                <li><a href="/Dress_rental1/logout.php">Logout</a></li>  <!-- ✅ If logged in, show Logout -->
+                <li><a href="/Dress_rental1/logout.php">Logout</a></li>
             <?php else: ?>
-                <li><a href="/Dress_rental1/cuslogin/cuslogin.php">Login</a></li>  <!-- ✅ If not logged in, show Login -->
+                <li><a href="/Dress_rental1/cuslogin/cuslogin.php">Login</a></li>
             <?php endif; ?>
         </ul>
 

@@ -1,13 +1,12 @@
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php";
-
-// Ensure user is logged in
+session_start();
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../cuslogin/cuslogin.php");
-    exit();
-}
-
+    header("Location: /Dress_rental1/cuslogin/cuslogin.php");
+    exit;
+} else {
 $user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
 
 // Validate selected address
 if (!isset($_SESSION['selected_address'])) {
@@ -85,6 +84,13 @@ if ($payment_method == 'COD') {
     $stmt = $conn->prepare($delete_cart_query);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
+    // Clear cart session data after placing the order
+unset($_SESSION['keep_dresses']);
+unset($_SESSION['total_rental_price']);
+unset($_SESSION['total_security_amount']);
+unset($_SESSION['cart_items']);
+unset($_SESSION['selected_address']);
+
 
     // Redirect to order confirmation page
     header("Location: ../orderconfirmationpage/orderconfirmationpage.php?rental_id=" . $rental_id);
@@ -108,4 +114,7 @@ if ($payment_method == 'COD') {
     echo "online transaction is not available";
     header("Location: ../cart/cart.php");
 }
+}
+
 ?>
+

@@ -1,12 +1,13 @@
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php";
-
+session_start();
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id']) || !isset($_GET['id'])) {
     die("Access denied.");
-}
+}else {
+$user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
 
 $address_id = $_GET['id'];
-$user_id = $_SESSION['user_id'];
 
 // Fetch the existing address
 $sql = "SELECT * FROM addresses WHERE id = ? AND user_id = ?";
@@ -20,6 +21,7 @@ if ($result->num_rows == 0) {
 }
 
 $address = $result->fetch_assoc();
+}
 ?>
 
 <!DOCTYPE html>

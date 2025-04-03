@@ -1,16 +1,17 @@
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php";
-
+session_start();
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id'])) {
-    die("User not logged in.");
-}
+    header("Location: /Dress_rental1/cuslogin/cuslogin.php");
+    exit;
+} else {
 $user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
 //$address_id = $_POST['address_id'];
 //echo "{$address_id}";
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['address_id'])) {
-    $user_id = $_SESSION['user_id'];
     $address_id = $_POST['address_id'];
     echo "{$user_id} {$address_id}";
 
@@ -37,5 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['address_id'])) {
     }
 } else {
     echo "Invalid request ";
+}
 }
 ?>

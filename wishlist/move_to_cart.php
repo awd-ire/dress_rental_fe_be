@@ -1,15 +1,15 @@
+
 <?php
 session_start();
-include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
-
-header('Content-Type: application/json');
-
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(["success" => false, "message" => "Login required"]);
     exit;
 }
-
+ else {
 $user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
+
 $dress_id = $_POST['dress_id'] ?? null;
 
 if (!$dress_id) {
@@ -51,4 +51,5 @@ if ($stmt->execute()) {
 }
 
 $conn->close();
+}
 ?>

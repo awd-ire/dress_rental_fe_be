@@ -1,12 +1,12 @@
 <?php
 session_start();
-include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
-
-// Ensure user is logged in
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: /Dress_rental1/cuslogin/cuslogin.php");
     exit;
-}
+} else {
+$user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
 
 // Validate and fetch product ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -24,8 +24,9 @@ $dress = $result->fetch_assoc();
 
 // Redirect if no product is found
 if (!$dress) {
-    header("Location: product-listing.php");
+    header("Location: ../productlistiningpage/product-listing.php");
     exit;
+}
 }
 ?>
 

@@ -1,20 +1,21 @@
+
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
-
-
-
+session_start();
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(["status" => "error", "message" => "Please log in to add items to the cart."]);
     exit;
-}
+} else {
+$user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
 
 if (!isset($_POST['dress_id'], $_POST['start_date'], $_POST['end_date'])) {
     echo json_encode(["status" => "error", "message" => "Invalid request."]);
     exit;
 }
 
+
 $dress_id = $_POST['dress_id'];
-$user_id = $_SESSION['user_id'];
 $start_date = $_POST['start_date'];
 $end_date = $_POST['end_date'];
 
@@ -46,5 +47,6 @@ if ($conn->query($sql)) {
     echo json_encode(["status" => "success", "message" => "Dress added to cart successfully!"]);
 } else {
     echo json_encode(["status" => "error", "message" => "Error: " . $conn->error]);
+}
 }
 ?>

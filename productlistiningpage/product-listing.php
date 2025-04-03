@@ -1,13 +1,14 @@
 <!-- product-listing.php -->
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
-
+session_start();
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id'])) {
     header("Location: /Dress_rental1/cuslogin/cuslogin.php");
     exit;
-}
-
+} else {
 $user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
+
 
 // Get category and type from URL
 $category = isset($_GET['category']) ? $_GET['category'] : 'all';
@@ -42,7 +43,8 @@ if (!empty($params)) {
 
 $stmt->execute();
 $result = $stmt->get_result();
-$products = $conn->query("SELECT id, name, image, rental_price,security_amount FROM dresses")
+$products = $conn->query("SELECT id, name, image, rental_price,security_amount FROM dresses");
+}
 ?>
 
 <!DOCTYPE html>

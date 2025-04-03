@@ -1,13 +1,15 @@
 <?php
 session_start();
-include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
+header("Cache-Control: no cache");
+include '../refresh/refresh.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: /Dress_rental1/cuslogin/cuslogin.php");
     exit;
-}
-
+} else {
 $user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
+
 $result = $conn->query("SELECT dresses.*, cart.start_date, cart.end_date 
                         FROM cart 
                         JOIN dresses ON cart.dress_id = dresses.id 
@@ -26,6 +28,7 @@ while ($row = $result->fetch_assoc()) {
 $unique_start_dates = array_unique($start_dates);
 $unique_end_dates = array_unique($end_dates);
 $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
+}
 ?>
 
 <!DOCTYPE html>

@@ -1,12 +1,16 @@
-<?php
-include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
 
+<?php
+session_start();
+header("Cache-Control: no cache");
 header("Content-Type: application/json"); // Set JSON response type
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(["success" => false, "message" => "Please log in to remove items from the cart."]);
     exit;
-}
+} else {
+$user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
+
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     echo json_encode(["success" => false, "message" => "Invalid request method."]);
@@ -19,7 +23,6 @@ if (!isset($_POST['id'])) {
 }
 
 $dress_id = intval($_POST['id']);
-$user_id = $_SESSION['user_id'];
 
 // Delete item from the cart
 $stmt = $conn->prepare("DELETE FROM cart WHERE user_id = ? AND dress_id = ?");
@@ -33,4 +36,5 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
+}
 ?>
