@@ -1,14 +1,12 @@
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php";
-
+session_start();
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id'])) {
-
-    die("User not logged in.");
-}
-
-
+    header("Location: /Dress_rental1/cuslogin/cuslogin.php");
+    exit;
+} else {
 $user_id = $_SESSION['user_id'];
-
+include "C:/xampp/htdocs/Dress_rental1/config.php";
 // Count the existing addresses
 $sql_count = "SELECT COUNT(*) AS total FROM addresses WHERE user_id = ?";
 $stmt_count = $conn->prepare($sql_count);
@@ -49,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error adding address.";
 
     }
-}
+}}
 
 ?>
 <!DOCTYPE html>

@@ -91,7 +91,7 @@ include "C:/xampp/htdocs/Dress_rental1/config.php";
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <div class="footer-logo">N</div>
+            <div class="footer-logo"></div>
             <div class="footer-section">
                 <h4>Our Company</h4>
                 <p>About Us</p>
@@ -106,7 +106,7 @@ include "C:/xampp/htdocs/Dress_rental1/config.php";
             </div>
             <div class="footer-section">
                 <h4>Contact Us</h4>
-                <p>xyz@gmail.com</p>
+                <p>dilipkumark102@gmail.com</p>
                 <p>9090909090</p>
             </div>
         </div>

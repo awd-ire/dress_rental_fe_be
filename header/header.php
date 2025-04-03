@@ -21,13 +21,13 @@ if (session_status() === PHP_SESSION_NONE) {
         <div class="hamburger" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </div>
-        <div class="logo">Dress Rental</div>
+        <div class="logo">Rent-A-Veil</div>
         <ul id="nav-menu">
             <li><a href="/Dress_rental1//cus_home/homepage.php">Home</a></li>
             <li class="dropdown">
-                <a href="#">Categories ▼</a>
                 <ul class="dropdown-menu">
                     <li class="sub-dropdown">
+                        <a href="#">Categorie      s ▼</a>
                         <a href="/Dress_rental1/subcategorym/subcategory.php">Men ▶</a>
                         <ul class="sub-dropdown-menu">
                             <li onclick="redirectTo('Men', 'Traditional')"><a>Traditional Wear</a></li>
@@ -53,9 +53,9 @@ if (session_status() === PHP_SESSION_NONE) {
                     </li>
                 </ul>
             </li>
-            <li><a href="/Dress_rental1/accessories.php">Accessories</a></li>
-            <li><a href="/Dress_rental1/contact.php">Contact Us</a></li>
-            <li><a href="/Dress_rental1/account.php">Account</a></li>
+            <li><a href=#>Accessories</a></li>
+            <li><a href=#>Contact Us</a></li>
+            <li><a href=#>Account</a></li>
             
             <!-- ✅ Dynamic Login/Logout -->
             <?php if (isset($_SESSION['user_id'])): ?>

@@ -2,6 +2,13 @@
 <?php
 include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: /Dress_rental1/cuslogin/cuslogin.php");
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+
 // Get category and type from URL
 $category = isset($_GET['category']) ? $_GET['category'] : 'all';
 $type = isset($_GET['type']) ? $_GET['type'] : 'all';
@@ -71,8 +78,8 @@ $products = $conn->query("SELECT id, name, image, rental_price,security_amount F
             echo "<a href='/Dress_rental1/prodveiw/product.php?id=" . $row['id'] . "'>";
             echo "<img src='/Dress_rental1/". $row['image']. "' alt='".$row['name']."'>";
               
-            echo "<h3>" . $row['name'] . "</h3>";
-            echo "<p class='price'>₹" . $row['price'] . "</p>";
+            echo "<p class='dress_name'>Dress Name: "  . $row['name'] . "</h3>";
+            echo "<p class='rent'>Rent amount: ₹" . $row['rental_price'] . "</p>";
             echo "</a>";
             echo "</div>";
         }

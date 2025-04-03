@@ -19,11 +19,11 @@
     <div class="container">
         <div class="category-card" onclick="redirectTo('Women', 'Traditional')">
             <img src="traditional.jpg" alt="Traditional Wear">
-            <h2>Traditional Wear (Women)</h2>
+            <h2>Traditional Wear</h2>
         </div>
         <div class="category-card" onclick="redirectTo('Women', 'party')">
             <img src="party.jpeg" alt="Party Wear">
-            <h2>Party Wear (Men)</h2>
+            <h2>Party Wear</h2>
         </div>
         <div class="category-card" onclick="redirectTo('Women', 'wedding')">
             <img src="wedding.jpeg" alt="Wedding Wear">

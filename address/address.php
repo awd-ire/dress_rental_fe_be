@@ -1,13 +1,12 @@
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php";
-
+session_start();
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id'])) {
     header("Location: /Dress_rental1/cuslogin/cuslogin.php");
     exit;
-}
-
+} else {
 $user_id = $_SESSION['user_id'];
-
+include "C:/xampp/htdocs/Dress_rental1/config.php";
 // Fetch user addresses
 $sql = "SELECT * FROM addresses WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
@@ -17,17 +16,21 @@ $result = $stmt->get_result();
 
 // Store selected address in session
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_address'])) {
+    
     $_SESSION['selected_address'] = $_POST['selected_address'];
     header("Location: ../checkout/checkout.php");
     exit();
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+   
     $_SESSION['keep_dresses'] = $_POST['keep_dresses'] ?? null;
     $_SESSION['total_rental_price'] = $_POST['total_rental_price'] ?? null;
     $_SESSION['total_security_amount'] = $_POST['total_security_amount'] ?? null;
     //print_r($_POST);
 }
 //print_r($_POST);
+}
+
 ?>
 
 
@@ -41,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="address-container">
-        <div class="back-button" onclick="goBack()">&#8592; Back</div>
+       
         <h2>Select Address</h2>
 
         <div class="add-new">
@@ -53,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <!-- Checkout Form -->
-        <form method="post">
+        <form action="../checkout/checkout.php" method="post">
             <div id="address-list">
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <div class="address-item" id="address-<?php echo $row['id']; ?>">

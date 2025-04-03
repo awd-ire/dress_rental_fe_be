@@ -116,16 +116,22 @@ function updateCartTotal() {
 
     checkProceedButton();
 }
-
-// Remove from Cart
 function removeFromCart(itemId) {
-    fetch(`/Dress_rental1/cart/remove_from_cart.php?id=${itemId}`)
-        .then(response => response.text())
-        .then(result => {
-            alert(result);
-            fetchCartItems();
-        })
-        .catch(error => console.error("Error removing item:", error));
+    fetch("/Dress_rental1/cart/remove_from_cart.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `id=${itemId}`
+    })
+    .then(response => response.json()) // Ensure JSON parsing
+    .then(data => {
+        if (data.success) {
+            alert("Removed from cart ❌");
+            location.reload();
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error("Error:", error));
 }
 
 // Enable/Disable Proceed Button

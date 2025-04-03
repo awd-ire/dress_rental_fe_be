@@ -1,33 +1,50 @@
-body {
+/* General Styles */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
+}
+
+/* Full-page Centering */
+body {
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     background: url('/Dress_rental1/cuslogin/background.jpg') no-repeat center center/cover;
 }
 
+/* Centered Login Container */
 .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
     background: rgba(255, 255, 255, 0.2);
     padding: 20px;
     border-radius: 12px;
     backdrop-filter: blur(10px);
-    text-align: center;
 }
 
+/* Login Box */
 .login-box {
     background: white;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
 }
 
+/* Heading */
 .login-box h2 {
     margin-bottom: 20px;
 }
 
+/* Input Fields */
 .login-box input {
     width: 100%;
     padding: 10px;
@@ -36,6 +53,7 @@ body {
     border-radius: 5px;
 }
 
+/* Buttons */
 .login-box button {
     width: 100%;
     padding: 10px;
@@ -47,6 +65,7 @@ body {
     margin-top: 10px;
 }
 
+/* Google Login Button */
 .google-btn {
     background: white;
     border: 1px solid #ccc;
@@ -56,60 +75,28 @@ body {
     width: 100%;
     padding: 10px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
+/* Google Button Image */
 .google-btn img {
     width: 20px;
     margin-right: 10px;
 }
 
+/* Links */
 a {
     text-decoration: none;
     color: #007BFF;
 }
 
-.login-box {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.login-box h2 {
-    margin-bottom: 20px;
-}
-
-.login-box input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.login-box button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background: #4CAF50;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-.google-btn {
-    background: white;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.google-btn img {
-    width: 20px;
-    margin-right: 10px;
+/* Responsive Design */
+@media (max-width: 480px) {
+    .login-container {
+        width: 90%;
+    }
+    
+    .login-box {
+        padding: 20px;
+    }
 }

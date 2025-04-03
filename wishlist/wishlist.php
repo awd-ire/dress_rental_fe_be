@@ -1,5 +1,4 @@
 <?php
-session_start();
 include "C:/xampp/htdocs/Dress_rental1/config.php"; // Database connection
 
 if (!isset($_SESSION['user_id'])) {
@@ -28,7 +27,9 @@ $result = $conn->query("SELECT dresses.* FROM wishlist JOIN dresses ON wishlist.
         <div id="wishlist-container">
             <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="wishlist-item">
+                <a href="/Dress_rental1/prodveiw/product.php?id=<?= $row['id'] ?>">
                     <img src="/Dress_rental1/<?php echo $row['image']; ?>" width="100">
+                </a>
                     <p><strong>Name:</strong> <?php echo $row['name']; ?></p>
                     <p><strong>Price:</strong> $<?php echo $row['price']; ?></p>
                     <button onclick="moveToCart(<?php echo $row['id']; ?>)">Move to Cart</button>

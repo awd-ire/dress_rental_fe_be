@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f8f8;
@@ -5,6 +6,7 @@ body {
     padding: 0;
 }
 
+/* Checkout Container */
 .checkout-container {
     width: 60%;
     margin: 50px auto;
@@ -14,27 +16,32 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Highlighted Headings */
 h2, h3 {
     text-align: center;
-    color: #333;
+    color: white;
+    background: rgb(255, 165, 0);
+    padding: 10px;
+    border-radius: 5px;
 }
 
+/* Main Checkout Content */
 .checkout-content {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
+/* Dress Details */
 .dress-details {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
-    background: white;
     padding: 15px;
     border-radius: 5px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Individual Dress Item */
 .dress-item {
     background: #fff;
     padding: 10px;
@@ -43,16 +50,16 @@ h2, h3 {
     text-align: center;
 }
 
+/* Dress Images */
 .dress-item img {
     width: 100%;
-    height: auto;
+    max-width: 450px;
+    height: 400px;
+    object-fit: cover;
     border-radius: 5px;
 }
 
-.dress-info {
-    margin-top: 10px;
-}
-
+/* Address and Rental Duration */
 #user-address, .rental-duration {
     background: #fff;
     padding: 15px;
@@ -60,6 +67,7 @@ h2, h3 {
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Billing and Payment Section */
 .bill-summary, .payment-options {
     background: #fff;
     padding: 15px;
@@ -67,17 +75,20 @@ h2, h3 {
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Billing Summary Text */
 .bill-summary p {
     display: flex;
     justify-content: space-between;
     font-size: 16px;
     margin: 5px 0;
+
 }
 
 .bill-summary strong {
     font-size: 24px;
 }
 
+/* Payment Form */
 .payment-options form {
     display: flex;
     flex-direction: column;
@@ -85,14 +96,16 @@ h2, h3 {
     align-items: center;
 }
 
+/* Payment Labels */
 .payment-options label {
     font-size: 14px;
 }
 
+/* Buttons */
 button {
     width: 100%;
     padding: 10px;
-    background-color: #ff6600;
+    background-color: hsla(145, 66%, 39%, 0.94);
     color: white;
     border: none;
     font-size: 16px;
@@ -101,9 +114,10 @@ button {
 }
 
 button:hover {
-    background-color: #e65c00;
+    background-color: #18aa13;
 }
 
+/* Responsive Design */
 @media (max-width: 900px) {
     .checkout-container {
         width: 90%;
@@ -114,5 +128,10 @@ button:hover {
 @media (max-width: 600px) {
     .checkout-content {
         flex-direction: column;
+    }
+
+    .dress-item img {
+        max-width: 150px;
+        height: 200px;
     }
 }

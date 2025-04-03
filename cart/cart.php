@@ -50,27 +50,59 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
     <h1>Your Cart</h1>
 
     <?php if (empty($cart_items)): ?>
-        <p>Your cart is empty.</p>
+       
+       <?php echo "<div class='empty-cart'> 
+            <p>Your cart is empty! Start exploring.</p>
+            <a href='../cus_home/homepage.php' class='shop-btn'>Start Shopping</a>
+          </div>";?>
+
+      <?php echo"<div class='how-it-works'>
+            <h2>How Rent-A-Veil Works?</h2>
+            <div class='steps'>
+                <div class='step'>
+                    <img src='images/browse.png' alt='Browse Dresses'>
+                    <p><strong>1. Browse Dresses</strong><br>Explore a wide range of dresses.</p>
+                </div>
+                <div class='step'>
+                    <img src='images/add-to-cart.png' alt='Add to Cart'>
+                    <p><strong>2. Add to Cart</strong><br>Select up to 3 dresses to try.</p>
+                </div>
+                <div class='step'>
+                    <img src='images/delivery.png' alt='Delivery'>
+                    <p><strong>3. Get Delivered</strong><br>We deliver all 3 dresses to your doorstep.</p>
+                </div>
+                <div class='step'>
+                    <img src='images/choose.png' alt='Choose & Return'>
+                    <p><strong>4. Choose & Return</strong><br>Keep the one you love, return the rest in 1 hour.</p>
+                </div>
+                <div class='step'>
+                    <img src='images/wear.png' alt='Wear & Enjoy'>
+                    <p><strong>5. Wear & Enjoy</strong><br>Return the dress after your rental period.</p>
+                </div>
+            </div>
+          </div>";
+          ?>
+
+
     <?php else: ?>
         <div id="cart-items" data-cart='<?= json_encode($cart_items) ?>'>
-            <?php foreach ($cart_items as $row): ?>
-                <div class="cart-item">
-                    <a href="/Dress_rental1/product_view.php?id=<?= $row['id'] ?>">
-                        <img src="/Dress_rental1/<?= htmlspecialchars($row['image']) ?>" width="100">
-                    </a>
-                    <p>
-                        <a href="/Dress_rental1/product_view.php?id=<?= $row['id'] ?>">
-                            Name: <?= htmlspecialchars($row['name']) ?>
-                        </a>
-                    </p>
-                    <p>Rent: ₹<?= htmlspecialchars($row['rental_price']) ?></p>
-                    <p>Security: ₹<?= htmlspecialchars($row['security_amount']) ?></p>
-                    <p>Delivery Date: <?= htmlspecialchars($row['start_date']) ?></p>
-                    <p>Return Date: <?= htmlspecialchars($row['end_date']) ?></p>
-                    <a href="/Dress_rental1/cart/remove_from_cart.php?id=<?= $row['id']">Remove</a>
-                </div>
-            <?php endforeach; ?>
-        </div>
+    <?php foreach ($cart_items as $row): ?>
+        <div class="cart-item">
+            <a href="/Dress_rental1/prodveiw/product.php?id=<?= $row['id'] ?>">
+                <img src="/Dress_rental1/<?= htmlspecialchars($row['image']) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
+                </a>
+                <p>Name: <?= htmlspecialchars($row['name']) ?></p>
+                <p>Rent: ₹<?= htmlspecialchars($row['rental_price']) ?></p>
+                <p>Security: ₹<?= htmlspecialchars($row['security_amount']) ?></p>
+                <p>Delivery Date: <?= htmlspecialchars($row['start_date']) ?></p>
+                <p>Return Date: <?= htmlspecialchars($row['end_date']) ?></p>
+                
+            <!-- Updated to a button -->
+                <button class="remove-btn" onclick="removeFromCart(<?= $row['id'] ?>)">Remove</button>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
 
         <?php if (!$same_dates): ?>
             <p style="color: red;">⚠️ Please select the same delivery and return date for all dresses.</p>
@@ -98,23 +130,10 @@ $same_dates = count($unique_start_dates) == 1 && count($unique_end_dates) == 1;
                 <button class="proceedBtn">Proceed</button>
             </a>
 
-            <style>
-                .proceedBtn {
-                    width: 100%;
-                    padding: 10px;
-                    background: green;
-                    color: white;
-                    border: none;
-                    cursor: pointer;
-                    font-size: 1.2rem;
-                    border-radius: 5px;
-                    margin-top: 10px;
-                }
-            </style>
+          
         <?php endif; ?>
     <?php endif; ?>
 
-    <br><a href="../cus_home/homepage.php">Add products to cart</a>
 </div>
 </body>
 </html>

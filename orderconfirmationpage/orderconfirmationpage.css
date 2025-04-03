@@ -1,3 +1,4 @@
+/* ✅ RESET & GENERAL STYLES */
 * {
     margin: 0;
     padding: 0;
@@ -8,58 +9,73 @@
 body {
     background: #faf3dc;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+/* ✅ NAVBAR */
 .navbar {
     background: #3d7af0;
-    padding: 10px;
+    padding: 15px;
     text-align: center;
     color: white;
     font-size: 18px;
+    font-weight: bold;
+    width: 100%;
 }
 
+/* ✅ MAIN CONTAINER */
 .container {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
     width: 90%;
+    gap: 20px;
     margin: auto;
 }
 
+/* ✅ LEFT & RIGHT SECTIONS */
 .left-section {
-    width: 65%;
+    flex: 1.5;
+    min-width: 60%;
 }
 
 .right-section {
-    width: 30%;
+    flex: 1;
+    min-width: 35%;
 }
 
+/* ✅ CONTENT BOXES */
 .box {
     background: white;
     padding: 17px;
     margin: 17px 0;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border:1.5px solid black;
-    
+    border: 1.5px solid black;
+    width: 100%;
 }
 
-
+/* ✅ BILLING SUMMARY */
 .bill-summary table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.bill-summary th, .bill-summary td {
+.bill-summary th, 
+.bill-summary td {
     padding: 8px;
     border-bottom: 1px solid #ddd;
     text-align: left;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .bill-summary th {
     background: #f4e3a1;
 }
 
+/* ✅ FEEDBACK BOX */
 .feedback textarea {
     width: 100%;
     height: 50px;
@@ -69,34 +85,126 @@ body {
     margin-top: 10px;
 }
 
-.items img {
-    width: 80px;
-    height: auto;
-    margin-right: 10px;
+/* ✅ RENTED ITEMS LIST */
+.items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 15px;
 }
 
 .items div {
     display: flex;
     align-items: center;
+    gap: 10px;
     margin-bottom: 10px;
-}
-.heading{
-    padding-top: 30px;
-    background: rgb(252,176,69);
-    background: linear-gradient(90deg, rgba(252,176,69,1) 55%, rgba(0,0,0,1) 90%);;
-    -webkit-background-clip: text;
-    color: transparent;         
-}
-.heading2{
-    background: rgb(252,176,69);
-    background: linear-gradient(90deg, rgba(252,176,69,1) 55%, rgba(187,66,12,1) 90%);
-    -webkit-background-clip: text;
-    color: transparent;  
+    width: 100%;
 }
 
-.adressbox{
+.items img {
+    width: 80px;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* ✅ HEADING STYLES */
+.heading, 
+.heading2 {
+    text-align: center;
+    font-size: 24px;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.heading {
+    background: linear-gradient(90deg, rgba(252,176,69,1) 55%, rgba(0,0,0,1) 90%);
+}
+
+.heading2 {
+    background: linear-gradient(90deg, rgba(252,176,69,1) 55%, rgba(187,66,12,1) 90%);
+}
+
+/* ✅ ADDRESS BOX */
+.adressbox {
     padding-top: 50px;
 }
-p{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+/* ✅ RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .left-section, 
+    .right-section {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .box {
+        padding: 15px;
+        margin: 10px 0;
+    }
+
+    .items {
+        justify-content: center;
+    }
+
+    .items img {
+        width: 70px;
+    }
+
+    .heading {
+        font-size: 22px;
+    }
+
+    .heading2 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .navbar {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .box {
+        padding: 10px;
+        margin: 8px 0;
+    }
+
+    .items {
+        justify-content: center;
+    }
+
+    .items img {
+        width: 60px;
+    }
+
+    .heading {
+        font-size: 20px;
+    }
+
+    .heading2 {
+        font-size: 16px;
+    }
 }

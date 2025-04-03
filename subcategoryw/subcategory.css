@@ -47,7 +47,7 @@ header {
 .category-card img {
     width: 100%;
     height: auto;
-    max-height: 350px; /* Adjust based on content */
+    max-height: 380px; /* Adjust based on content */
     object-fit: cover; /* Ensures images fill the container without distortion */
     display: block;
 }

@@ -45,27 +45,27 @@ if (!$dress) {
         <!-- Product Gallery -->
         <div class="product-gallery">
             <img id="main-image" src="/Dress_rental1/<?php echo htmlspecialchars($dress['image']); ?>" alt="Product Image">
-            <div class="gallery-thumbnails">
+            <!-- <div class="gallery-thumbnails">
                 <img src="/Dress_rental1/<?php echo htmlspecialchars($dress['image']); ?>" alt="Thumbnail 1" onclick="changeImage(this)">
                
-            </div>
+            </div> -->
         </div>
 
         <!-- Product Details -->
         <div class="product-details">
-            <h1><?php echo htmlspecialchars($dress['name']); ?></h1>
+            <p class="dress_name"><?php echo htmlspecialchars($dress['name']); ?></p>
             <p class="price">Price: ₹<?php echo htmlspecialchars($dress['price']); ?></p>
             <p class="rent">Rent: ₹<?php echo htmlspecialchars($dress['rental_price']); ?></p>
             <p class="deposit">Security Deposit: ₹<?php echo htmlspecialchars($dress['security_amount']); ?></p>
             <p class="size">Size: ₹<?php echo htmlspecialchars($dress['size']); ?></p>
             <!-- Rental Calendar -->
-            <label>Select Rental Dates:</label>
+            <label class = "dates">Select Rental Dates:</label>
             <input type="date" id="start-date">
             <input type="date" id="end-date">
 
             <!-- Buttons -->
             <div class="buttons">
-            <button class onclick="addToCart(<?php echo $dress['id']; ?>)">Add to Cart</button>
+            <button class=add-to-cart onclick="addToCart(<?php echo $dress['id']; ?>)">Add to Cart</button>
             <div id="cart-message">
             </div> <!-- Place for showing success message -->
 
@@ -99,13 +99,13 @@ if (!$dress) {
     <div class="bought-together">
         <h2>Frequently Bought Together</h2>
         <div class="product-list">
-            <div class="related-product">
+            <!-- <div class="related-product">
                 <img src="" alt="related_Product">
                 <p>Product Name</p>
             </div>
             <div class="related-product">
                 <img src="" alt="related_Product">
-                <p>Product Name</p>
+                <p>Product Name</p> -->
             </div>
         </div>
     </div>

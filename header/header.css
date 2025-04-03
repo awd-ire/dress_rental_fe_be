@@ -12,14 +12,14 @@ nav {
     justify-content: space-between;
     align-items: center;
     background: #333;
-    padding: 10px 40px; /* Reduced padding */
+    padding: 10px 20px;
     position: sticky;
     top: 0;
     width: 100%;
     z-index: 1000;
 }
 
-/* Logo in the middle */
+/* Logo in the center */
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
@@ -28,11 +28,12 @@ nav {
     flex-grow: 1;
 }
 
-/* Hamburger on the left */
+/* Hamburger (Initially Hidden) */
 .hamburger {
     font-size: 1.5rem;
     color: white;
     cursor: pointer;
+    display: none;
 }
 
 /* Navigation Menu */
@@ -40,7 +41,7 @@ nav ul {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 20px; /* Reduced gap */
+    gap: 15px;
 }
 
 nav ul li {
@@ -50,8 +51,8 @@ nav ul li {
 nav ul li a {
     text-decoration: none;
     color: white;
-    font-size: 0.9rem;
-    padding: 8px 15px; /* Reduced padding */
+    font-size: 1rem;
+    padding: 8px 12px;
     transition: 0.3s;
     border-radius: 5px;
     display: block;
@@ -69,7 +70,6 @@ nav ul li a:hover {
     padding: 10px 12px;
     border-radius: 5px;
     font-weight: bold;
-   
 }
 
 .login-btn:hover {
@@ -80,7 +80,7 @@ nav ul li a:hover {
 /* Wishlist & Cart Icons */
 .nav-icons {
     display: flex;
-    gap: 15px; /* Reduced spacing */
+    gap: 15px;
     margin-left: 10px;
 }
 
@@ -88,7 +88,6 @@ nav ul li a:hover {
     font-size: 1.2rem;
     color: white;
     transition: 0.3s;
-    margin-right: 20px;
 }
 
 .nav-icons a:hover {
@@ -96,11 +95,10 @@ nav ul li a:hover {
 }
 
 /* Dropdown Menu */
-.dropdown-menu,
-.sub-dropdown-menu {
+.dropdown-menu {
     display: none;
     position: absolute;
-    background: #342323;
+    background: #444;
     list-style: none;
     padding: 10px;
     min-width: 160px;
@@ -118,8 +116,13 @@ nav ul li a:hover {
 }
 
 .sub-dropdown-menu {
+    display: none;
+    position: absolute;
     top: 0;
     left: 100%;
+    background: #555;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .sub-dropdown:hover .sub-dropdown-menu {
@@ -138,9 +141,9 @@ h1 {
     font-size: 2rem;
 }
 
-
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
+    /* Hide the menu by default and show hamburger */
     nav ul {
         display: none;
         flex-direction: column;
@@ -159,18 +162,41 @@ h1 {
 
     .hamburger {
         display: block;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: white;
+        font-size: 1.8rem;
+    }
+
+    .nav-icons {
+        margin-left: auto;
     }
 }
 
-@media (min-width: 769px) {
-    nav ul {
-        display: flex;
+@media (max-width: 768px) {
+    .logo {
+        font-size: 1.3rem;
     }
 
-    .hamburger {
-        display: none;
+    nav ul li a {
+        font-size: 0.95rem;
+        padding: 10px;
+    }
+
+    .login-btn {
+        font-size: 0.9rem;
+        padding: 8px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 1.2rem;
+    }
+
+    .nav-icons a {
+        font-size: 1rem;
+    }
+
+    .login-btn {
+        font-size: 0.8rem;
+        padding: 7px 9px;
     }
 }

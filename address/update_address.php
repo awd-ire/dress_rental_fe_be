@@ -28,7 +28,7 @@ $stmt->bind_param("ssssssssssii", $full_name, $phone, $email, $building, $road, 
 
 if ($stmt->execute()) {
     echo "Address updated successfully.";
-    header("Location: address.php"); // Redirect back to the address selection page
+    header("Location: ../address/address.php"); // Redirect back to the address selection page
 } else {
     echo "Error updating address.";
 }

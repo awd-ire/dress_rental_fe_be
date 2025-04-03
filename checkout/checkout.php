@@ -1,12 +1,12 @@
 <?php
-include "C:/xampp/htdocs/Dress_rental1/config.php";
-
-// Check if user is logged in
+session_start();
+header("Cache-Control: no cache");
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../cuslogin/cuslogin.php");
-    exit();
-}
-
+    header("Location: /Dress_rental1/cuslogin/cuslogin.php");
+    exit;
+} else {
+$user_id = $_SESSION['user_id'];
+include "C:/xampp/htdocs/Dress_rental1/config.php";
 // Ensure required session data is available
 if (!isset($_SESSION['keep_dresses'], $_SESSION['total_rental_price'], $_SESSION['total_security_amount'])) {
     die("Missing session data. Please restart the checkout process.");
@@ -15,14 +15,12 @@ if (!isset($_SESSION['keep_dresses'], $_SESSION['total_rental_price'], $_SESSION
 $keepDresses = $_SESSION['keep_dresses'];
 $totalRent = $_SESSION['total_rental_price'];
 $totalSecurity = $_SESSION['total_security_amount'];
-$user_id = $_SESSION['user_id']; 
 
 
 // Store total rent and taxes in session
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['total_amount'] = $_POST['total_amount'] ?? null;
     $_SESSION['taxes'] = $_POST['taxes'] ?? null;
-    echo "fuck u";
 }
 // Fetch cart items for the logged-in user
 $sql = "SELECT c.dress_id, d.image, d.name, d.description, d.size, c.start_date, c.end_date, 
@@ -55,7 +53,8 @@ $unified_start_date = !empty($start_dates) ? min($start_dates) : "N/A";
 $unified_end_date = !empty($end_dates) ? max($end_dates) : "N/A";
 
 // Fetch selected user address
-if (isset($_SESSION['selected_address'])) {
+if (isset($_POST['selected_address'])) {
+    $_SESSION['selected_address']= $_POST['selected_address'];
     $address_id = $_SESSION['selected_address'];
     $address_query = "SELECT full_name, phone, email, building, road, landmark, area, city, state, pincode 
                       FROM addresses WHERE id = ? AND user_id = ?";
@@ -96,6 +95,7 @@ $total_amount = $totalRent + $totalSecurity + $platform_fee + $packaging_fee + $
 // Store calculated values in session before displaying the checkout page
 $_SESSION['total_amount'] = $total_amount;
 $_SESSION['taxes'] = $taxes;
+}
 ?>
 
 <!DOCTYPE html>
@@ -118,14 +118,16 @@ $_SESSION['taxes'] = $taxes;
                         <div class="dress-item">
                             <img src="/Dress_rental1/<?= htmlspecialchars($item['image']); ?>" alt="<?= htmlspecialchars($item['name']); ?>">
                             <div class="dress-info">
-                                <h3><?= htmlspecialchars($item['name']); ?></h3>
+                                <p><strong>Dress Name:</strong><?= htmlspecialchars($item['name']); ?></h3>
                                 <p><?= htmlspecialchars($item['description']); ?></p>
                                 <p><strong>Size:</strong> <?= htmlspecialchars($item['size']); ?></p>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 <?php else : ?>
-                    <p>Your cart is empty.</p>
+                    <?php redirect("Location: ../cus_home/homepage.php");
+                    exit(); ?>
+                    
                 <?php endif; ?>
             </div>
 

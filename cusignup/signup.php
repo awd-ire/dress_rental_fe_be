@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
-    <link rel="stylesheet" href="styles1.css">
+    <link rel="stylesheet" href="styles.css">
     
 </head>
 <body>
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button class="google-btn">Continue with Google</button>
         </div>
 
-        <p class="alternate-login">Already have an account? <a href="/cuslogin/login.php">Login here</a></p>
+        <p class="alternate-login">Already have an account? <a href="../cuslogin/cuslogin.php">Login here</a></p>
     </div>
 
 </body>

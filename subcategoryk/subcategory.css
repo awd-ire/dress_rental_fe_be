@@ -46,8 +46,8 @@ header {
 /* Ensure the image fits properly without extra space */
 .category-card img {
     width: 100%;
-    height: auto;
-    max-height: 350px; /* Adjust based on content */
+    height: 450px;
+    max-height: 450px; /* Adjust based on content */
     object-fit: cover; /* Ensures images fill the container without distortion */
     display: block;
 }
