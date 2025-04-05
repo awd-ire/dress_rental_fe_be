@@ -55,7 +55,7 @@ if (session_status() === PHP_SESSION_NONE) {
             </li>
             <li><a href="#">Accessories</a></li>
             <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Account</a></li>
+            <li><a href="../account/account.php">Account</a></li>
             
             <?php if (isset($_SESSION['user_id'])): ?>
                 <li><a href="/Dress_rental1/logout.php">Logout</a></li>

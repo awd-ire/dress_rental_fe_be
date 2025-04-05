@@ -3,43 +3,129 @@ function changeImage(img) {
     document.getElementById("main-image").src = img.src;
 }
 
-// Toggle Size Chart
-function toggleSizeChart() {
-    document.getElementById("size-chart").classList.toggle("hidden");
-}
-
-// Rental Date Selection Logic
+// Initialize and fetch calendar data
 document.addEventListener("DOMContentLoaded", function () {
-    const startDate = document.getElementById("start-date");
-    const endDate = document.getElementById("end-date");
-
-    startDate.addEventListener("change", function () {
-        let minDate = new Date(startDate.value);
-        minDate.setDate(minDate.getDate() + 2); // Minimum rental period: 2 days
-        let maxDate = new Date(startDate.value);
-        maxDate.setDate(maxDate.getDate() + 4); // Maximum rental period: 4 days
-
-        endDate.min = minDate.toISOString().split("T")[0];
-        endDate.max = maxDate.toISOString().split("T")[0];
-        endDate.value = ""; // Reset end date if start date changes
-    });
-
-    endDate.addEventListener("change", function () {
-        let selectedStartDate = new Date(startDate.value);
-        let selectedEndDate = new Date(endDate.value);
-        let daysSelected = (selectedEndDate - selectedStartDate) / (1000 * 60 * 60 * 24);
-
-        if (daysSelected < 2 || daysSelected > 4) {
-            alert("Please select a rental period of at least 2 days and at most 4 days.");
-            endDate.value = "";
-        }
+    fetchUnavailableDates(() => {
+        setupCalendarPreview();
+        setupDatePickers();
     });
 });
 
+let redDates = [], orangeDates = [], blueDates = [], blockedDates = [];
+
+function normalizeDates(dates) {
+    return dates.map(d => new Date(d).toISOString().split("T")[0]);
+}
+
+function fetchUnavailableDates(callback) {
+    fetch(`/Dress_rental1/prodveiw/fetch_unavailable_dates.php?dress_id=${dressId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Fetched Dates Response:", data); // ✅ Console log
+            redDates = normalizeDates(data.redDates || []);
+            orangeDates = normalizeDates(data.orangeDates || []);
+            blueDates = normalizeDates(data.blueDates || []);
+            blockedDates = [...redDates, ...orangeDates, ...blueDates];
+            if (callback) callback();
+        })
+        .catch(err => console.error("Error fetching unavailable dates:", err));
+}
+
+function setupCalendarPreview() {
+    const calendarDiv = document.getElementById("calendar-preview");
+    if (!calendarDiv) return;
+
+    calendarDiv.innerHTML = "";
+    const today = new Date();
+    const daysToShow = 30;
+
+    for (let i = 0; i < daysToShow; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        const dateStr = date.toISOString().split("T")[0];
+
+        const div = document.createElement("div");
+        div.classList.add("calendar-day");
+
+        if (redDates.includes(dateStr)) {
+            div.classList.add("red");
+            div.innerText = "❌";
+        } else if (orangeDates.includes(dateStr)) {
+            div.classList.add("orange");
+            div.innerText = "🧼";
+        } else if (blueDates.includes(dateStr)) {
+            div.classList.add("blue");
+            div.innerText = "🚚";
+        } else {
+            div.classList.add("green");
+            div.innerText = "✅";
+        }
+
+        div.title = dateStr;
+        calendarDiv.appendChild(div);
+    }
+}
+
+function setupDatePickers() {
+    const startDate = document.getElementById("start-date");
+    const endDate = document.getElementById("end-date");
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().split("T")[0];
+    startDate.setAttribute("min", todayStr);
+
+    startDate.addEventListener("change", function () {
+        const selectedStr = startDate.value;
+        const selectedStart = new Date(selectedStr + "T00:00:00");
+
+        console.log("Selected Start Date:", selectedStr);
+        console.log("Blocked Dates:", blockedDates);
+
+        if (selectedStart < today) {
+            alert("Start date is in the past.");
+            startDate.value = "";
+            endDate.value = "";
+            return;
+        }
+
+        if (blockedDates.includes(selectedStr)) {
+            alert(`Start date (${selectedStr}) is unavailable.`);
+            startDate.value = "";
+            endDate.value = "";
+            return;
+        }
+
+        let min = new Date(selectedStart);
+        min.setDate(min.getDate() + 2);
+
+        let max = new Date(selectedStart);
+        max.setDate(max.getDate() + 4);
+
+        endDate.min = min.toISOString().split("T")[0];
+        endDate.max = max.toISOString().split("T")[0];
+        endDate.value = "";
+
+        let valid = [];
+        let temp = new Date(min);
+        while (temp <= max) {
+            const d = temp.toISOString().split("T")[0];
+            if (!blockedDates.includes(d)) valid.push(d);
+            temp.setDate(temp.getDate() + 1);
+        }
+
+        if (valid.length === 0) {
+            alert("This dress is unavailable in the selected period. Please choose another date.");
+            startDate.value = "";
+            endDate.value = "";
+        }
+    });
+}
+
 // Add to Cart Function
 function addToCart(dressId) {
-    let startDate = document.getElementById("start-date").value;
-    let endDate = document.getElementById("end-date").value;
+    const startDate = document.getElementById("start-date").value;
+    const endDate = document.getElementById("end-date").value;
 
     if (!startDate || !endDate) {
         alert("Please select rental dates before adding to the cart.");
