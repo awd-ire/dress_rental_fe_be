@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button class="google-btn">Continue with Google</button>
         </div>
 
-        <p class="alternate-login">Already have an account? <a href="../cuslogin/cuslogin.php">Login here</a></p>
+        <p class="alternate-login">Already have an account? <a href="../delivery/deliverer_login.php">Login here</a></p>
     </div>
 
 </body>

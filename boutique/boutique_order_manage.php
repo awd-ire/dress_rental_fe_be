@@ -9,160 +9,56 @@ if (!isset($_SESSION['boutique_id'])) {
 
 $boutique_id = $_SESSION['boutique_id'];
 
-// Delete dress if requested
-if (isset($_GET['delete'])) {
-    $id = intval($_GET['delete']);
+// Fetch rentals that include dresses uploaded by this boutique AND are pending delivery
+$query = "
+    SELECT DISTINCT r.id, r.user_id, r.delivery_status
+    FROM rentals r
+    JOIN rental_items ri ON r.id = ri.rent_id
+    JOIN dresses d ON ri.dress_id = d.id
+    WHERE r.delivery_status = 'pending'
+      AND d.boutique_id = '$boutique_id'
+";
 
-    $result = $conn->query("SELECT image FROM dresses WHERE id='$id' AND boutique_id='$boutique_id'");
-    $row = $result->fetch_assoc();
-
-    if ($row) {
-        unlink("../" . $row['image']);
-        $conn->query("DELETE FROM dresses WHERE id='$id' AND boutique_id='$boutique_id'");
-    }
-
-    header("Location: manage_dresses.php");
-    exit;
-}
-
-// Fetch only dresses uploaded by this boutique
-$sql = "SELECT * FROM dresses WHERE boutique_id = '$boutique_id'";
-$result = $conn->query($sql);
+$result = mysqli_query($conn, $query);
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Manage Dresses</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<h2>📦 Orders to Prepare</h2>
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .dress-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .dress-card {
-            background: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 15px;
-        }
-
-        .dress-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 6px;
-        }
-
-        .dress-details {
-            padding: 10px 0;
-        }
-
-        .dress-details p {
-            margin: 5px 0;
-            color: #444;
-        }
-
-        .actions {
-            margin-top: 10px;
-        }
-
-        .actions a {
-            text-decoration: none;
-            padding: 8px 12px;
-            margin-right: 5px;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .actions a.delete {
-            background-color: #d9534f;
-        }
-
-        .top-actions {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .top-actions a {
-            display: inline-block;
-            margin: 5px 10px;
-            text-decoration: none;
-            padding: 10px 16px;
-            background-color: #2196F3;
-            color: white;
-            border-radius: 4px;
-        }
-
-        @media screen and (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-
-            .actions a {
-                display: block;
-                margin-bottom: 8px;
-                text-align: center;
-            }
-
-            .top-actions a {
-                display: block;
-                margin: 8px auto;
-            }
-        }
-    </style>
-</head>
-<body>
-
-<h2>Manage Your Dresses</h2>
-
-<div class="top-actions">
-    <a href="upload_dress.php">Upload New Dress</a>
-    <a href="boutique_logout.php" style="background-color: #f44336;">Logout</a>
-</div>
-
-<div class="dress-grid">
-    <?php while ($row = $result->fetch_assoc()) { ?>
-        <div class="dress-card">
-            <img src="../<?php echo htmlspecialchars($row['image']); ?>" alt="Dress Image">
-            <div class="dress-details">
-                <p><strong>Name:</strong> <?php echo htmlspecialchars($row['name']); ?></p>
-                <p><strong>Size:</strong> <?php echo htmlspecialchars($row['size']); ?></p>
-                <p><strong>Price:</strong> ₹<?php echo htmlspecialchars($row['price']); ?></p>
-                <p><strong>Rental Price:</strong> ₹<?php echo htmlspecialchars($row['rental_price']); ?></p>
-                <p><strong>Security:</strong> ₹<?php echo htmlspecialchars($row['security_amount']); ?></p>
-                <p><strong>Category:</strong> <?php echo htmlspecialchars($row['category']); ?></p>
-                <p><strong>Type:</strong> <?php echo htmlspecialchars($row['type']); ?></p>
-            </div>
-            <div class="actions">
-                <a href="edit_dress.php?id=<?php echo $row['id']; ?>">Edit</a>
-                <a class="delete" href="?delete=<?php echo $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this dress?')">Delete</a>
-            </div>
+<?php if (mysqli_num_rows($result) > 0): ?>
+    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+        <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+            <p>Rental ID: <?= $row['id'] ?></p>
+            <p>Customer ID: <?= $row['user_id'] ?></p>
+            <form method="post" action="">
+                <input type="hidden" name="rental_id" value="<?= $row['id'] ?>">
+                <button type="submit" name="mark_ready">Mark as Ready for Delivery</button>
+            </form>
         </div>
-    <?php } ?>
-</div>
+    <?php endwhile; ?>
+<?php else: ?>
+    <p>No orders to prepare right now.</p>
+<?php endif; ?>
 
-</body>
-</html>
+<?php
+// Handle mark ready
+if (isset($_POST['mark_ready'])) {
+    $rental_id = $_POST['rental_id'];
+
+    // Optional: You might only want to update if this boutique owns dresses in this rental
+    mysqli_query($conn, "
+        UPDATE rentals 
+        SET delivery_status = 'ready' 
+        WHERE id = $rental_id
+          AND id IN (
+              SELECT r.id
+              FROM rentals r
+              JOIN rental_items ri ON r.id = ri.rent_id
+              JOIN dresses d ON ri.dress_id = d.id
+              WHERE d.boutique_id = '$boutique_id'
+          )
+    ");
+
+    header("Location: boutique_order_manage.php");
+    exit();
+}
+?>

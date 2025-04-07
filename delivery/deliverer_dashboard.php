@@ -29,7 +29,7 @@ if (!isset($_SESSION['deliverer_id'])) {
 
 <div class="card">
     <h3>Handle Returns (after 1-hour window)</h3>
-    <a class="button" href="deliverer_confirm.php">Return Pickup</a>
+    <a class="button" href="deliverer_collect_dresses.php">Return Pickup</a>
 </div>
 
 <div class="card">

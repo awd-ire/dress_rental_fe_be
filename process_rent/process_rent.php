@@ -65,6 +65,7 @@ if (!isset($_SESSION['user_id'])) {
         $stmt->execute();
         $rental_id = $stmt->insert_id;
         $_SESSION['rental_id']=$rental_id;
+        echo "{$rental_id}";
 
         // Insert rental items
         $rental_items_query = "INSERT INTO rental_items (rent_id, dress_id, dress_status) VALUES (?, ?, 'pend')";

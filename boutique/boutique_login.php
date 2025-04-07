@@ -33,13 +33,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login For Boutique</title>
     <link rel="stylesheet" href="/Dress_rental1/cuslogin/style.css">
 </head>
 <body>
     <div class="login-container">
         <div class="login-box">
-            <h2>Login</h2>
+            <h2>Login As Boutique</h2>
             <form action="" method="POST">  <!-- ✅ Action set to empty to process form in the same file -->
                 <input type="email" name="email" placeholder="Enter Email" required>
                 <input type="password" name="password" placeholder="Enter Password" required>
