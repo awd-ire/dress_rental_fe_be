@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = $_POST['action'];
 
     if ($action === "deliver") {
-        mysqli_query($conn, "UPDATE rentals SET delivery_status='delivered', delivery_time=NOW(),return_status=awaiting_return_selection  
+        mysqli_query($conn, "UPDATE rentals SET delivery_status='delivered', delivery_time=NOW(),return_status='awaiting_return_selection'  
         WHERE id=$rental_id");
     } elseif ($action === "pickup_returns") {
         mysqli_query($conn, "UPDATE rental_items SET dress_status='returned' WHERE rental_id=$rental_id AND dress_status='returned'");

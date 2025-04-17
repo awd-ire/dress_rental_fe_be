@@ -24,7 +24,7 @@ session_start();
             <ul>
                 <li class="menu-item active" data-section="personal-info">Personal Information</li>
                 <li class="menu-item" data-section="order-history">Order History</li>
-                <a href="../return_dress/return_selection.php"><li>Return</li></a>
+                <a href="../return_dress/start_return.php"><li>Return</li></a>
                 <li>Refund</li>
             </ul>
         </div>

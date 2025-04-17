@@ -79,14 +79,14 @@ if (!$dress) {
 
 </script>
 
-        <div class="buttons">
+       
+    </div>
+    <div class="buttons">
             <button class="add-to-cart" onclick="addToCart(<?php echo $dress['id']; ?>)">Add to Cart</button>
             <div id="cart-message"></div>
             <button class="add-to-wishlist" onclick="addToWishlist(<?php echo $dress['id']; ?>)">Add to Wishlist</button>
             <script src="/Dress_rental1/wishlist/wishlist.js"></script>
         </div>
-    </div>
-
     <!-- Description -->
     <div class="product-description">
         <h2>Description</h2>

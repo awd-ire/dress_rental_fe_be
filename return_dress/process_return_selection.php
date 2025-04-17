@@ -3,86 +3,90 @@ session_start();
 include "C:/xampp/htdocs/Dress_rental1/config.php";
 
 if (!isset($_SESSION['user_id'])) {
-    die("Unauthorized access.");
+    header("Location: ../cuslogin/cuslogin.php");
+    exit;
 }
 
 $user_id = $_SESSION['user_id'];
+$rental_id = $_POST['rental_id'] ?? null;
+$keep_dresses = $_POST['keep_dresses'] ?? [];
 
-if (!isset($_POST['rental_id'])) {
-    die("Rental ID missing.");
+if (!$rental_id || empty($keep_dresses)) {
+    die("Invalid request.");
 }
 
-$rental_id = intval($_POST['rental_id']);
-$kept_dresses = isset($_POST['kept_dresses']) ? array_map('intval', $_POST['kept_dresses']) : [];
-
-// Get keep limit
-$limit_query = "SELECT keep_dress FROM rentals WHERE id = ? ";
-$stmt = $conn->prepare($limit_query);
-$stmt->bind_param("i", $rental_id);
+// Fetch rental to check deadline
+$sql = "SELECT delivery_time FROM rentals WHERE id = ? AND user_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $rental_id, $user_id);
 $stmt->execute();
-$keep_limit_result = $stmt->get_result()->fetch_assoc();
-$keep_limit = $keep_limit_result['keep_dress'];
-
-// Safety check on backend
-if (count($kept_dresses) > $keep_limit) {
-    die("You selected more dresses than allowed.");
+$result = $stmt->get_result();
+if ($result->num_rows == 0) {
+    die("Rental not found or unauthorized.");
 }
 
-// Fetch all dresses in this rental
-$sql = "SELECT dress_id FROM rental_items WHERE rent_id = ?";
+$rental = $result->fetch_assoc();
+$delivery_time = strtotime($rental['delivery_time']);
+$deadline = $delivery_time + 3600;
+
+if (time() > $deadline) {
+    die("Time limit exceeded. You can no longer select dresses.");
+}
+
+// Fetch all rental items for this rental
+$sql = "SELECT id FROM rental_items WHERE rent_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $rental_id);
 $stmt->execute();
-$result = $stmt->get_result();
+$items_result = $stmt->get_result();
 
-$all_dress_ids = [];
-while ($row = $result->fetch_assoc()) {
-    $all_dress_ids[] = $row['dress_id'];
+$all_items = [];
+while ($row = $items_result->fetch_assoc()) {
+    $all_items[] = $row['id'];
 }
 
-$return_date = date("Y-m-d");
-$status_time = date("Y-m-d H:i:s");
+$keep_ids = array_map('intval', $keep_dresses);
+$return_ids = array_diff($all_items, $keep_ids);
 
-foreach ($all_dress_ids as $dress_id) {
-    if (in_array($dress_id, $kept_dresses)) {
-        $status = 'kept';
-        $availability = 'not_available';
-    } else {
-        $status = 'returned';
-        $availability = 'may_be_available'; // pending deliverer pickup and boutique confirmation
-    }
+// Begin transaction
+$conn->begin_transaction();
 
-    // Update rental_items
-    $update_item = "UPDATE rental_items 
-                    SET dress_status = ?, return_date = ?, last_updated = ?
-                    WHERE rent_id = ? AND dress_id = ?";
-    $stmt = $conn->prepare($update_item);
-    $stmt->bind_param("sssii", $status, $return_date, $status_time, $rental_id, $dress_id);
-    $stmt->execute();
-
-    // Update dress availability immediately only for returned ones
-    if ($status == 'returned') {
-        $update_dress = "UPDATE dresses SET availability = ? WHERE id = ?";
-        $stmt = $conn->prepare($update_dress);
-        $stmt->bind_param("si", $availability, $dress_id);
+try {
+    // Update kept dresses
+    if (!empty($keep_ids)) {
+        $in = implode(',', array_fill(0, count($keep_ids), '?'));
+        $types = str_repeat('i', count($keep_ids));
+        $stmt = $conn->prepare("UPDATE rental_items SET dress_status = 'kept' WHERE id IN ($in)");
+        $stmt->bind_param($types, ...$keep_ids);
         $stmt->execute();
     }
+
+    // Update returned dresses
+    if (!empty($return_ids)) {
+        $in = implode(',', array_fill(0, count($return_ids), '?'));
+        $types = str_repeat('i', count($return_ids));
+        $stmt = $conn->prepare("UPDATE rental_items SET dress_status = 'returned' WHERE id IN ($in)");
+        $stmt->bind_param($types, ...$return_ids);
+        $stmt->execute();
+
+        // Insert into cleaning queue
+        $insert = $conn->prepare("INSERT INTO cleaning (rental_item_id, picked_up_by_deliverer) VALUES (?, NOW())");
+        foreach ($return_ids as $r_id) {
+            $insert->bind_param("i", $r_id);
+            $insert->execute();
+        }
+    }
+
+    // Update rental status
+    $stmt = $conn->prepare("UPDATE rentals SET return_status = 'awaiting_return_selection' WHERE id = ?");
+    $stmt->bind_param("i", $rental_id);
+    $stmt->execute();
+
+    $conn->commit();
+    header("Location: return_success.php?rental_id=$rental_id");
+    exit;
+} catch (Exception $e) {
+    $conn->rollback();
+    die("Error: " . $e->getMessage());
 }
-if ($kept_count === 0) {
-    $return_status = 'unselected_returned';
-} else {
-    $return_status = 'kept_waiting_return';
-}
-
-// Update rental status: mark return selection completed
-$update_rental = "UPDATE rentals SET return_status=?,  return_selection_done = 1 WHERE id = ?";
-$stmt = $conn->prepare($update_rental);
-$stmt->bind_param("ii", $return_status, $rental_id);
-$stmt->execute();
-
-// You can optionally log or notify deliverer system here
-
-// Redirect to a success page
-header("Location: ../return_dress/return_success_page.php?rental_id=$rental_id");
-exit;
 ?>
