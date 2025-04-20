@@ -8,35 +8,41 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Find any rental that is delivered and within the 1-hour window, and return selection not done
-$query = "SELECT id, delivery_time FROM rentals 
+// Try to find a rental where return selection is NOT yet done and within 1-hour window
+$query = "SELECT id, delivery_time, return_selection_done 
+          FROM rentals 
           WHERE user_id = ? 
-          AND delivery_status = 'delivered' 
-          AND return_selection_done = 0 
-          ORDER BY delivery_time DESC LIMIT 1";
+            AND delivery_status = 'delivered'
+          ORDER BY delivery_time DESC";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-if ($result->num_rows === 0) {
-    die("No active rentals eligible for return selection.");
+$redirected = false;
+$now = time();
+
+while ($row = $result->fetch_assoc()) {
+    $rental_id = $row['id'];
+    $delivery_time = strtotime($row['delivery_time']);
+    $deadline = $delivery_time + 3600;
+
+    // If return selection not done and still within 1 hour, redirect to return_selection
+    if ($row['return_selection_done'] == 0 && $now <= $deadline) {
+        header("Location: return_selection.php?rental_id=$rental_id");
+        $redirected = true;
+        break;
+    }
+
+    // If return selection is done, redirect to return status tracker
+    if ($row['return_selection_done'] == 1) {
+        header("Location: return_status_track.php?user_id=$user_id");
+        $redirected = true;
+        break;
+    }
 }
 
-$rental = $result->fetch_assoc();
-$rental_id = $rental['id'];
-$delivery_time = strtotime($rental['delivery_time']);
-$now = time();
-$time_diff = $now - $delivery_time;
-
-// Allow only if within 1 hour (3600 seconds)
-if ($time_diff <= 3600) {
-    // Redirect to return selection page
-    header("Location: return_selection.php?rental_id=$rental_id");
-    exit;
-} else {
-    // Time’s up — redirect to return status tracking
-    header("Location: return_status_track.php?rental_id=$rental_id");
-    exit;
+if (!$redirected) {
+    die("No active rental found for return.");
 }
 ?>

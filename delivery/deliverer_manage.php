@@ -9,7 +9,8 @@ if (!isset($_SESSION['deliverer_id'])) {
 
 // Fetch rentals marked as 'ready' along with customer & address details
 $query = "
-    SELECT r.id AS rental_id, r.user_id, u.name AS acc_holder_name, a.full_name As customer_name, u.email, a.phone, a.building,a.road,a.landmark,a.area, a.city, a.state, a.pincode 
+    SELECT r.id AS rental_id, r.user_id, u.name AS acc_holder_name, a.full_name As customer_name, u.email,
+     a.phone, a.building,a.road,a.landmark,a.area, a.city, a.state, a.pincode 
     FROM rentals r
     JOIN users u ON r.user_id = u.id
     JOIN addresses a ON r.user_id = a.user_id AND r.address_id=a.id

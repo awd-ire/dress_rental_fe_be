@@ -15,6 +15,18 @@ if (!$rental_id || empty($keep_dresses)) {
     die("Invalid request.");
 }
 
+$check = $conn->prepare("SELECT return_status FROM rentals WHERE id = ? AND user_id = ?");
+$check->bind_param("ii", $rental_id, $user_id);
+$check->execute();
+$res = $check->get_result();
+if ($res->num_rows == 0) {
+    die("Rental not found.");
+}
+$status = $res->fetch_assoc();
+if ($status['return_status'] === 'unselected_returned') {
+    die("Return selection already completed.");
+}
+
 // Fetch rental to check deadline
 $sql = "SELECT delivery_time FROM rentals WHERE id = ? AND user_id = ?";
 $stmt = $conn->prepare($sql);
@@ -70,17 +82,18 @@ try {
         $stmt->execute();
 
         // Insert into cleaning queue
-        $insert = $conn->prepare("INSERT INTO cleaning (rental_item_id, picked_up_by_deliverer) VALUES (?, NOW())");
+        $insert = $conn->prepare("INSERT INTO cleaning_log (rental_item_id, picked_up_by_deliverer) VALUES (?, NOW())");
         foreach ($return_ids as $r_id) {
             $insert->bind_param("i", $r_id);
             $insert->execute();
         }
     }
 
-    // Update rental status
-    $stmt = $conn->prepare("UPDATE rentals SET return_status = 'awaiting_return_selection' WHERE id = ?");
-    $stmt->bind_param("i", $rental_id);
-    $stmt->execute();
+// Mark return selection as completed
+$stmt = $conn->prepare("UPDATE rentals SET return_status = 'unselected_returned', return_selection_done = 1 WHERE id = ?");
+$stmt->bind_param("i", $rental_id);
+$stmt->execute();
+
 
     $conn->commit();
     header("Location: return_success.php?rental_id=$rental_id");

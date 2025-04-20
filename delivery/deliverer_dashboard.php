@@ -29,13 +29,13 @@ if (!isset($_SESSION['deliverer_id'])) {
 
 <div class="card">
     <h3>Handle Returns (after 1-hour window)</h3>
-    <a class="button" href="deliverer_collect_dresses.php">Return Pickup</a>
+    <a class="button" href="deliverer_pickup_unkept.php">Return Pickup</a>
 </div>
 
 <div class="card">
     <h3>QC & Post-Rental Collection</h3>
     <p>Collect kept dresses after rental period and send for cleaning</p>
-    <a class="button" href="deliverer_qc.php">QC & Cleaning</a>
+    <a class="button" href="deliverer_pickup_kept.php">QC & Cleaning</a>
 </div>
 
 <a href="deliverer_logout.php" class="button" style="background: #e53935;">Logout</a>

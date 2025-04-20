@@ -41,7 +41,7 @@ if (!isset($_SESSION['boutique_id'])) {
 <div class="card">
     <h3>🔁 View Returns & Final QC</h3>
     <p>Track returned dresses and mark them as available after quality check</p>
-    <a class="button" href="boutique_view.php">View Returns</a>
+    <a class="button" href="boutique_qc_return.php">View Returns</a>
 </div>
 
 <div class="card">
