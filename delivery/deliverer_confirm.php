@@ -12,13 +12,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = $_POST['action'];
 
     if ($action === "deliver") {
-        mysqli_query($conn, "UPDATE rentals SET delivery_status='delivered', delivery_time=NOW(),return_status='awaiting_return_selection'  
-        WHERE id=$rental_id");
-    } elseif ($action === "pickup_returns") {
-        mysqli_query($conn, "UPDATE rental_items SET dress_status='returned' WHERE rental_id=$rental_id AND dress_status='returned'");
-    } elseif ($action === "collect_kept") {
-        mysqli_query($conn, "UPDATE rental_items SET dress_status='cleaning' WHERE rental_id=$rental_id AND dress_status='kept'");
-    }
+        mysqli_query($conn, "UPDATE rentals r
+JOIN rental_items ri ON r.id = ri.rent_id
+JOIN dresses d ON d.id = ri.dress_id
+SET 
+    r.delivery_status = 'delivered',
+    r.delivery_time = NOW(),
+    r.return_status = 'awaiting_return_selection',
+    d.availability = 'may_be_available'
+WHERE r.id = $rental_id
+");
+    } 
 
     header("Location: deliverer_manage.php");
     exit();

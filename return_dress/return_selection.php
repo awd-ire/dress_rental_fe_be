@@ -10,11 +10,14 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Fetch all rentals delivered and pending return selection
-$sql = "SELECT r.id AS rental_id, r.delivery_time, r.return_status, r.keep_dress
+$sql = "SELECT r.id AS rental_id, r.delivery_time, r.return_status, r.keep_dress,d.availability
         FROM rentals r
+        join rental_items ri on r.id=ri.rent_id
+        join dresses d on ri.dress_id=d.id
         WHERE r.user_id = ? 
         AND r.delivery_status = 'delivered' 
-        AND r.return_status = 'awaiting_return_selection'";
+        AND r.return_status = 'awaiting_return_selection'
+        and d.availability='may_be_available'";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -134,6 +137,16 @@ function validateSelection(form, keepLimit) {
     return true; // Allow 0 as valid if they want to return all
 }
 </script>
+// <script>
+// document.querySelector("form").addEventListener("submit", function(e) {
+//     let checked = document.querySelectorAll('input[name="keep_dresses[]"]:checked');
+//     if (checked.length === 0) {
+//         alert("Please select at least one dress to keep.");
+//         e.preventDefault();
+//     }
+// });
+// </script>
+
 
 </body>
 </html>

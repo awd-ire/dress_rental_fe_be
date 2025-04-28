@@ -79,9 +79,6 @@ function setupDatePickers() {
         const selectedStr = startDate.value;
         const selectedStart = new Date(selectedStr + "T00:00:00");
 
-        console.log("Selected Start Date:", selectedStr);
-        console.log("Blocked Dates:", blockedDates);
-
         if (selectedStart < today) {
             alert("Start date is in the past.");
             startDate.value = "";

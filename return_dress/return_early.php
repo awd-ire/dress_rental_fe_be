@@ -1,10 +1,15 @@
-<?php
+<?php 
 session_start();
+include "C:/xampp/htdocs/Dress_rental1/refresh/refresh.php";
+
+
 include "C:/xampp/htdocs/Dress_rental1/config.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rental_id'])) {
     $rental_id = intval($_POST['rental_id']);
+    echo "$rental_id";
     $user_id = $_SESSION['user_id'];
+    echo "$user_id";
 
     // Verify the rental belongs to the logged-in customer
     $check_stmt = $conn->prepare("SELECT id FROM rentals WHERE id = ? AND user_id = ?");
@@ -22,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rental_id'])) {
 
     try {
         // Update kept dresses to mark them for early return
-        $update_items = $conn->prepare("UPDATE rental_items SET customer_early_return = 'yes' WHERE rent_id = ? AND dress_status = 'kept'");
+        $update_items = $conn->prepare("UPDATE rentals SET customer_early_return = 'yes' WHERE id = ?");
         $update_items->bind_param("i", $rental_id);
         $update_items->execute();
 

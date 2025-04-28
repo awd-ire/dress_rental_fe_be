@@ -1,6 +1,6 @@
 <?php
-header("Cache-Control: no cache");
 session_start();
+include "C:/xampp/htdocs/Dress_rental1/refresh/refresh.php";
 include "C:/xampp/htdocs/Dress_rental1/config.php";
 
 if (!isset($_SESSION['user_id'])) {
@@ -11,7 +11,8 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Fetch all relevant rentals
-$stmt = $conn->prepare("SELECT * FROM rentals WHERE user_id = ? AND return_selection_done = 1 AND rental_status != 'completed'");
+$stmt = $conn->prepare("SELECT * FROM rentals WHERE user_id = ? 
+                        AND return_selection_done = 1 AND rental_status != 'completed'");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $rentals_result = $stmt->get_result();
@@ -36,6 +37,10 @@ while ($rental = $rentals_result->fetch_assoc()) {
 <body>
     <h2>Ongoing Rentals</h2>
 
+    <?php if (isset($_GET['returned'])): ?>
+        <p style="color: green;">Return request submitted successfully. The deliverer will be notified.</p>
+    <?php endif; ?>
+
     <?php if (empty($rentals)): ?>
         <p>No ongoing rentals found.</p>
     <?php endif; ?>
@@ -46,7 +51,10 @@ while ($rental = $rentals_result->fetch_assoc()) {
         $rental_period_end = strtotime($rental['end_date']);
         $current_time = time();
 
-        $stmt = $conn->prepare("SELECT ri.*, d.name FROM rental_items ri JOIN dresses d ON ri.dress_id = d.id WHERE ri.rent_id = ?");
+        $stmt = $conn->prepare("SELECT ri.*, d.name, r.customer_early_return FROM rental_items ri 
+                                JOIN dresses d ON ri.dress_id = d.id
+                                JOIN rentals r ON ri.rent_id = r.id
+                                WHERE ri.rent_id = ?");
         $stmt->bind_param("i", $rental_id);
         $stmt->execute();
         $items_result = $stmt->get_result();
@@ -69,21 +77,26 @@ while ($rental = $rentals_result->fetch_assoc()) {
             }
         }
 
-        // AUTO UPDATE if rental period ends and kept dresses not marked
-        if (!empty($kept_dresses) && !$all_returned && $current_time >= $rental_period_end) {
+        // AUTO UPDATE: Only update status if not already set to 'yes'
+        if (!empty($kept_dresses) && !$all_returned && $current_time >= $rental_period_end && $rental['customer_early_return'] !== 'yes') {
             $conn->begin_transaction();
             try {
-                $updateStmt = $conn->prepare("UPDATE rental_items SET customer_early_return = 'yes' WHERE rent_id = ? AND dress_status = 'kept'");
-                $updateStmt->bind_param("i", $rental_id);
-                $updateStmt->execute();
-
-                $statusStmt = $conn->prepare("UPDATE rentals SET return_status = 'kept_waiting_return', rental_status = 'in_progress' WHERE id = ?");
+                $statusStmt = $conn->prepare("UPDATE rentals SET customer_early_return = 'yes', return_status = 'kept_waiting_return', rental_status = 'in_progress' WHERE id = ?");
                 $statusStmt->bind_param("i", $rental_id);
                 $statusStmt->execute();
-
                 $conn->commit();
-                // header("Location: return_status_track.php");
-                // exit;
+            } catch (Exception $e) {
+                $conn->rollback();
+                echo "<p style='color:red;'>Auto-update failed: " . $e->getMessage() . "</p>";
+            }
+        } elseif ($rental['customer_early_return'] === null) {
+            // Set customer_early_return = 'no' only if not set
+            $conn->begin_transaction();
+            try {
+                $statusStmt = $conn->prepare("UPDATE rentals SET customer_early_return = 'no', return_status = 'kept_waiting_return', rental_status = 'in_progress' WHERE id = ?");
+                $statusStmt->bind_param("i", $rental_id);
+                $statusStmt->execute();
+                $conn->commit();
             } catch (Exception $e) {
                 $conn->rollback();
                 echo "<p style='color:red;'>Auto-update failed: " . $e->getMessage() . "</p>";
@@ -120,8 +133,8 @@ while ($rental = $rentals_result->fetch_assoc()) {
                 <?php endforeach; ?>
             </ul>
 
-            <?php if (!empty($kept_dresses) && !$all_returned): ?>
-                <form action="return_early.php" method="POST">
+            <?php if (!empty($kept_dresses) && !$all_returned && !$kept_returned_by_user && $current_time < $delivery_time + 3600): ?>
+                <form action="/Dress_rental1/return_dress/return_early.php" method="POST">
                     <input type="hidden" name="rental_id" value="<?= $rental_id ?>">
                     <button type="submit" class="button">Return Kept Dresses Now</button>
                 </form>

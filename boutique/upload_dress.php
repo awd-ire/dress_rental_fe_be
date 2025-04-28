@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $security_amount = $price * 0.15;
     $category = $_POST['category'];
     $type = $_POST['type'];
-    $available = 1;
+    $available = 'available';
 
     $target_dir = "../dresses/";
     if (!is_dir($target_dir)) {

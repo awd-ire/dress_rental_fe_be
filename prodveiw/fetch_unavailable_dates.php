@@ -14,12 +14,13 @@ $cleaning_dates = [];
 $transit_dates = [];
 
 $query = $conn->prepare("
-    SELECT start_date, end_date, ri.dress_status 
+    SELECT start_date, end_date, ri.dress_status,d.availability 
     FROM rentals r 
-    JOIN rental_items ri ON r.id = ri.rent_id 
+    JOIN rental_items ri ON r.id = ri.rent_id
+    join dresses d on ri.dress_id=d.id 
     WHERE ri.dress_id = ? 
-    AND r.delivery_status IN ('delivered', 'rented', 'returned') 
-    AND ri.dress_status IN ('kept', 'available_soon', 'may_be_available')
+    AND (r.delivery_status IN ('delivered', 'ready') 
+    or ri.dress_status IN ('kept'))
 ");
 $query->bind_param("i", $dress_id);
 $query->execute();
@@ -62,4 +63,4 @@ ini_set('display_errors', 1);
 
 // TEMPORARY DEBUG LOGGING:
 file_put_contents("debug_log.txt", "Request received\n", FILE_APPEND)
-?>
+    ?>

@@ -46,8 +46,9 @@ if (isset($_POST['mark_ready'])) {
 
     // Optional: You might only want to update if this boutique owns dresses in this rental
     mysqli_query($conn, "
-        UPDATE rentals 
+        UPDATE rentals r
         SET delivery_status = 'ready' 
+
         WHERE id = $rental_id
           AND id IN (
               SELECT r.id
